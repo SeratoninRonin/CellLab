@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/GAGE/Prefabs/Widgets/FloatingText.cs" type="Script" id=2]
+
+[node name="Point" type="Position2D"]
+script = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 1
+text = "+1000"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[connection signal="tween_all_completed" from="Tween" to="." method="OnAllTweensCompleted"]

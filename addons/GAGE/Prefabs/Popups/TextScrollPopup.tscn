@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/GAGE/Prefabs/Popups/TextScrollPopup.cs" type="Script" id=1]
+[ext_resource path="res://addons/GAGE/Prefabs/Widgets/TypewriterLabel.tscn" type="PackedScene" id=2]
+
+[node name="TextScrollPopup" type="CenterContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+TypewriterEffect = ExtResource( 2 )
+
+[node name="VBox" type="VBoxContainer" parent="."]
+margin_left = 489.0
+margin_top = 293.0
+margin_right = 534.0
+margin_bottom = 307.0
+
+[node name="Label" type="Label" parent="VBox"]
+margin_right = 45.0
+margin_bottom = 14.0
+text = "POPUP"
+
+[node name="ScrollTimer" type="Timer" parent="."]
+
+[node name="FinishedTimer" type="Timer" parent="."]

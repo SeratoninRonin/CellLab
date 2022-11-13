@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/GAGE/Debuging/DebugConsole.cs" type="Script" id=1]
+
+[node name="DebugConsole" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -110.0
+margin_right = 2.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Echo" type="Label" parent="Panel"]
+modulate = Color( 1, 0.8, 0, 1 )
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 535.0
+margin_bottom = 103.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Echo"
+autowrap = true
+max_lines_visible = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Input" type="LineEdit" parent="Panel"]
+margin_left = 7.0
+margin_top = 79.0
+margin_right = 535.0
+margin_bottom = 103.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_vertical = 10
+custom_colors/font_color = Color( 1, 0.8, 0, 1 )
+caret_blink = true
+caret_blink_speed = 0.5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="text_entered" from="Panel/Input" to="." method="OnTextEntered"]
