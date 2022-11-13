@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="CellLab"
-run/main_scene="res://2D/GameOfLife/GameOfLifeScene.tscn"
+run/main_scene="res://2D/Wireworld/WireworldScene.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -22,7 +22,6 @@ Core="*res://addons/GAGE/Core/Core.tscn"
 
 window/size/width=1440
 window/size/height=960
-window/size/fullscreen=true
 
 [editor_plugins]
 

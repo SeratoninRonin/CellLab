@@ -9,9 +9,10 @@ public interface ICellGraph2D
 {
     int Width { get; }
     int Height { get; }
-    //Dictionary<Vector2,Cell> Cells { get; }
-    //List<Cell> Cells { get; }
     List<Cell> Cells { get; }
     void CreateGraph();
     bool IsInBounds(Vector2 location);
+    Cell GetCellAt(int x, int y);
+    
+
 }
