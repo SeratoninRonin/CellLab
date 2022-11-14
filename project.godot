@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="CellLab"
-run/main_scene="res://2D/Wireworld/WireworldScene.tscn"
+run/main_scene="res://MainMenuScene.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -20,8 +20,8 @@ Core="*res://addons/GAGE/Core/Core.tscn"
 
 [display]
 
-window/size/width=1440
-window/size/height=960
+window/size/width=1920
+window/size/height=1080
 
 [editor_plugins]
 

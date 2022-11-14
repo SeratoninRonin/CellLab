@@ -31,7 +31,7 @@ public class GameOfLifeUI : PanelContainer
 
     public void OnQuitButtonPressed()
     {
-        GetTree().Quit();
+        GetTree().ChangeScene("res://MainMenuScene.tscn");
     }
 
     public void OnResetButtonPressed()

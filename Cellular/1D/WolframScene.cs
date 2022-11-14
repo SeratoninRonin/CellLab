@@ -41,10 +41,10 @@ public class WolframScene : Node2D
     {
         _rule = 0;
         _ruleset = new BitArray(new byte[] {_rule});
-        _grid = GetNode<TileMap>("Split/ViewportContainer/Grid");
-        _inputButton = GetNode<Button>("Split/RightBox/VBoxContainer/InputButton");
-        _wrapButton = GetNode<Button>("Split/RightBox/VBoxContainer/WrapButton");
-        _genLabel = GetNode<Label>("Split/RightBox/VBoxContainer/GenLabel");
+        _grid = GetNode<TileMap>("Grid");
+        _inputButton = GetNode<Button>("Box/InputButton");
+        _wrapButton = GetNode<Button>("Box/WrapButton");
+        _genLabel = GetNode<Label>("Box/GenLabel");
         //_ruleLabel = GetNode<Label>("Split/RightBox/VBoxContainer/RuleLabel");
         width = (int)(GetViewport().Size.x / _grid.CellSize.x);
         height = (int)(GetViewport().Size.y / _grid.CellSize.y);
@@ -192,5 +192,10 @@ public class WolframScene : Node2D
     {
         wrap = !wrap;
         _wrapButton.Text = "Wrap: " + wrap;
+    }
+
+    public void OnMainMenuButtonPressed()
+    {
+        GetTree().ChangeScene("res://MainMenuScene.tscn");
     }
 }
