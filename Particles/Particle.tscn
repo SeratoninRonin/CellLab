@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Particles/Particle.cs" type="Script" id=1]
+[ext_resource path="res://Assets/circle8.png" type="Texture" id=2]
+
+[node name="Particle" type="Sprite"]
+texture = ExtResource( 2 )
+script = ExtResource( 1 )

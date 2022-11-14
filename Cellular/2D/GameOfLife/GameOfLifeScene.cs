@@ -210,15 +210,11 @@ public class GameOfLifeScene : Node2D
             for (int x = 0; x < GridWidth; x += factor)
             {
                 var col = Colors.Black;
-                //if (x % 8 == 0)
-                //  col = Colors.Gray;
                 DrawLine(MapToWorld(x, 0), MapToWorld(x, GridHeight - 1), col);
             }
             for (int y = 0; y < GridHeight; y += factor)
             {
                 var col = Colors.Black;
-                //if (y % 8 == 0)
-                //  col = Colors.Gray;
                 DrawLine(MapToWorld(0, y), MapToWorld(GridWidth - 1, y), col);
             }
         }
