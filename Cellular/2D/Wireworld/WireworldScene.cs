@@ -8,6 +8,7 @@ using System.Linq;
 public class WireworldScene : Node2D
 {
     bool _placing = false;
+    bool _destroying = false;
     int _selectedIndex = -1;
     bool _simPaused= false;
     float _delay;
@@ -19,7 +20,7 @@ public class WireworldScene : Node2D
     Button _playButton;
 
     Dictionary<Vector2, float> changes;
-    int _head, _tail, _wire, _bdz;
+    int _head, _tail, _wire, _bkg;
 
     [Export]
     public float StepDelay = .1f;
@@ -83,45 +84,73 @@ public class WireworldScene : Node2D
     {
         if(@event is InputEventMouseButton mb)
         {
+            if(mb.ButtonIndex == (int)ButtonList.Right && mb.Pressed)
+            {
+                if (!_simPaused)
+                    OnPlayButtonPressed();
+                var loc = _map.WorldToMap(GetGlobalMousePosition());
+                if(_cells.IsInBounds(loc))
+                {
+                    _destroying = true;
+                    if (!changes.ContainsKey(loc))
+                        changes.Add(loc, _bkg);
+                    else
+                        changes[loc] = _bkg;
+                    ApplyChanges();
+                }
+
+            }
+
+            if(mb.ButtonIndex==(int)ButtonList.Right && !mb.Pressed)
+            {
+                _destroying = false;
+                ApplyChanges();
+            }
+
             if(mb.ButtonIndex == (int)ButtonList.Left && mb.Pressed)  //left was just pressed
             {
-                if(!(_selectedIndex<0) && _simPaused) //can only build when paused
+                if(!(_selectedIndex<0)) //can only build when paused
                 {
+                    if (!_simPaused)
+                        OnPlayButtonPressed();
                     GD.Print("Gonna place!");
                     var loc = _map.WorldToMap(GetGlobalMousePosition());
-                    if (_selectedIndex == 0) //yellow
+                    if (_cells.IsInBounds(loc))
                     {
-                        if (!changes.ContainsKey(loc))
-                            changes.Add(loc, _wire);
-                        else
-                            changes[loc] = _wire;
-                        _placing = true;
+                        if (_selectedIndex == 0) //yellow
+                        {
+                            if (!changes.ContainsKey(loc))
+                                changes.Add(loc, _wire);
+                            else
+                                changes[loc] = _wire;
+                            _placing = true;
+                        }
+                        if (_selectedIndex == 1)
+                        {
+                            if (!changes.ContainsKey(loc))
+                                changes.Add(loc, _tail);
+                            else
+                                changes[loc] = _tail;
+                            _placing = true;
+                        }
+                        if (_selectedIndex == 2)
+                        {
+                            if (!changes.ContainsKey(loc))
+                                changes.Add(loc, _head);
+                            else
+                                changes[loc] = _head;
+                            _placing = true;
+                        }
+                        if (_selectedIndex == 3)
+                        {
+                            if (!changes.ContainsKey(loc))
+                                changes.Add(loc, _bkg);
+                            else
+                                changes[loc] = _bkg;
+                            _placing = true;
+                        }
+                        ApplyChanges();
                     }
-                    if(_selectedIndex == 1)
-                    {
-                        if (!changes.ContainsKey(loc))
-                            changes.Add(loc, _tail);
-                        else
-                            changes[loc] = _tail;
-                        _placing = true;
-                    }
-                    if(_selectedIndex==2)
-                    {
-                        if (!changes.ContainsKey(loc))
-                            changes.Add(loc, _head);
-                        else
-                            changes[loc] = _head;
-                        _placing = true;
-                    }
-                    if(_selectedIndex==3)
-                    {
-                        if (!changes.ContainsKey(loc))
-                            changes.Add(loc, _bdz);
-                        else
-                            changes[loc] = _bdz;
-                        _placing = true;
-                    }
-                    ApplyChanges();
                 }
             }
             else if(mb.ButtonIndex == (int)ButtonList.Left && !mb.Pressed)
@@ -136,36 +165,52 @@ public class WireworldScene : Node2D
             {
                 GD.Print("dragging");
                 var loc = _map.WorldToMap(GetGlobalMousePosition());
-                if (_selectedIndex == 0) //yellow
+                if (_cells.IsInBounds(loc))
                 {
-                    if (!changes.ContainsKey(loc))
-                        changes.Add(loc, _wire);
-                    else
-                        changes[loc] = _wire;
-                }
-                if (_selectedIndex == 1)
-                {
-                    if (!changes.ContainsKey(loc))
-                        changes.Add(loc, _tail);
-                    else
-                        changes[loc] = _tail;
-                }
-                if (_selectedIndex == 2)
-                {
-                    if (!changes.ContainsKey(loc))
-                        changes.Add(loc, _head);
-                    else
-                        changes[loc] = _head;
-                }
-                if (_selectedIndex == 3)
-                {
-                    if (!changes.ContainsKey(loc))
-                        changes.Add(loc, _bdz);
-                    else
-                        changes[loc] = _bdz;
-                }
+                    if (_selectedIndex == 0) //yellow
+                    {
+                        if (!changes.ContainsKey(loc))
+                            changes.Add(loc, _wire);
+                        else
+                            changes[loc] = _wire;
+                    }
+                    if (_selectedIndex == 1)
+                    {
+                        if (!changes.ContainsKey(loc))
+                            changes.Add(loc, _tail);
+                        else
+                            changes[loc] = _tail;
+                    }
+                    if (_selectedIndex == 2)
+                    {
+                        if (!changes.ContainsKey(loc))
+                            changes.Add(loc, _head);
+                        else
+                            changes[loc] = _head;
+                    }
+                    if (_selectedIndex == 3)
+                    {
+                        if (!changes.ContainsKey(loc))
+                            changes.Add(loc, _bkg);
+                        else
+                            changes[loc] = _bkg;
+                    }
 
-                ApplyChanges();
+                    ApplyChanges();
+                }
+            }
+            if(_destroying)
+            {
+                var loc = _map.WorldToMap(GetGlobalMousePosition());
+                if(_cells.IsInBounds(loc))
+                {
+                    if (!changes.ContainsKey(loc))
+                        changes.Add(loc, _bkg);
+                    else
+                        changes[loc]= _bkg;
+
+                    ApplyChanges();
+                }
             }
         }
     }
@@ -199,7 +244,7 @@ public class WireworldScene : Node2D
         foreach (var kvp in changes)
         {
             var cell = _cells.GetCellAt(kvp.Key);
-            if (kvp.Value != _bdz)
+            if (kvp.Value != _bkg)
             {
                 if (!cell.Traits.ContainsKey("WireState"))
                     cell.Traits.Add("WireState", kvp.Value);
@@ -346,6 +391,7 @@ public class WireworldScene : Node2D
         _placing = false;
         GD.Print("Tile " + index + " Selected!");
         _selector.Texture=_tileList.GetItemIcon(index);
+        _selector.Modulate = new Color(1, 1, 1, .5f);
         _selectedIndex = index;
     }
 }

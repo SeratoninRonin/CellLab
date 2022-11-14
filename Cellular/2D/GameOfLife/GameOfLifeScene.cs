@@ -6,6 +6,7 @@ using System.Linq;
 public class GameOfLifeScene : Node2D
 {
     int robidx;
+    GameOfLifeUI _ui;
     TileMap _grid;
     //TileMap _overlay;
     MoveableCamera _camera;
@@ -15,6 +16,8 @@ public class GameOfLifeScene : Node2D
     float _delay;
     bool[,] board;
     List<Vector2> changes = new List<Vector2>();
+    bool _placing = false;
+    bool _destroying = false;
 
     [Export]
     public float StepDelay = .25f;
@@ -40,6 +43,7 @@ public class GameOfLifeScene : Node2D
         //_overlay = GetNode<TileMap>("Overlay");
         _selector = GetNode<Sprite>("SelectorSprite");
         _selector.Visible = GridVisible;
+        _ui = GetNode<GameOfLifeUI>("UI/Menu");
         robidx = _grid.TileSet.FindTileByName("Rob");
         grididx = _grid.TileSet.FindTileByName("GridWhite");
         board = new bool[GridWidth, GridHeight];
@@ -52,7 +56,7 @@ public class GameOfLifeScene : Node2D
         _camera.GlobalPosition = pos;
         TickAll();
         var t = new Tween();
-        t.InterpolateProperty(_camera, "zoom", Vector2.One*16f, Vector2.One, 7f);
+        t.InterpolateProperty(_camera, "zoom", Vector2.One * 16f, Vector2.One, 7f);
         AddChild(t);
         t.Start();
     }
@@ -60,7 +64,7 @@ public class GameOfLifeScene : Node2D
     public override void _Process(float delta)
     {
         var mpos = GetGlobalMousePosition();
-        _selector.GlobalPosition = MapToWorld(WorldToMap(mpos)) + (_grid.CellSize/2);
+        _selector.GlobalPosition = MapToWorld(WorldToMap(mpos)) + (_grid.CellSize / 2);
 
         if (!_simPause)
         {
@@ -76,28 +80,116 @@ public class GameOfLifeScene : Node2D
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        //if (Input.IsActionJustReleased("Click"))
-        if(@event is InputEventMouseButton mb)
+        //check start/end clicks
+        if (@event is InputEventMouseButton mb)
         {
+            //left release
             if (mb.ButtonIndex == (int)ButtonList.Left && !mb.Pressed)
             {
                 var pos = GetGlobalMousePosition();
                 var loc = _grid.WorldToMap(pos);
                 GD.Print("Click!  p:" + pos + "  l:" + loc);
+                _placing = false;
                 if (IsInBounds(loc))
                 {
                     var x = (int)loc.x;
                     var y = (int)loc.y;
                     var alive = board[x, y];
-                    board[x, y] = !alive;
-                    changes.Add(loc);
-                    if (alive)
+                    if(!alive)
                     {
+                        board[x, y] = true;
+                        changes.Add(loc);
+                        _grid.SetCell(x, y, robidx);
+                    }
+                }
+            }
+            //right release
+            else if (mb.ButtonIndex == (int)ButtonList.Right && !mb.Pressed)
+            {
+                var loc = _grid.WorldToMap(GetGlobalMousePosition());
+                _destroying = false;
+                if (IsInBounds(loc))
+                {
+                    var x = (int)loc.x;
+                    var y = (int)loc.y;
+                    var alive = board[x, y];
+                    if(alive)
+                    {
+                        board[x, y] = false;
+                        changes.Add(loc);
                         _grid.SetCell(x, y, -1);
                     }
-                    else
+                }
+            }
+            //left press
+            else if(mb.ButtonIndex==(int)ButtonList.Left && mb.Pressed)
+            {
+                if (!_simPause)
+                    _ui.OnPlayButtonPressed();
+                var loc = _grid.WorldToMap(GetGlobalMousePosition());
+                _placing = true;
+                if(IsInBounds(loc))
+                {
+                    var x = (int)loc.x;
+                    var y = (int)loc.y;
+                    var alive = board[x, y];
+                    if(!alive)
                     {
+                        board[x, y] = true;
+                        changes.Add(loc);
                         _grid.SetCell(x, y, robidx);
+                    }
+                }
+            }
+            //right press
+            else if(mb.ButtonIndex==(int)ButtonList.Right && mb.Pressed)
+            {
+                if (!_simPause)
+                    _ui.OnPlayButtonPressed();
+                var loc = _grid.WorldToMap(GetGlobalMousePosition());
+                _destroying = true;
+                if(IsInBounds(loc))
+                {
+                    var x = (int)loc.x;
+                    var y = (int)loc.y;
+                    var alive = board[x, y];
+                    if(alive)
+                    {
+                        board[x, y] = false;
+                        changes.Add(loc);
+                        _grid.SetCell(x, y, -1);
+                    }
+                }
+            }
+        }
+        //check dragging
+        if(@event is InputEventMouseMotion mm)
+        {
+            if (!_placing && !_destroying)
+                return;
+            else
+            {
+                var loc = _grid.WorldToMap(GetGlobalMousePosition());
+                var x = (int)loc.x;
+                var y = (int)loc.y;
+                bool alive = board[x, y];
+
+                if(_placing)
+                {
+                    if(!alive)
+                    {
+                        board[x, y] = true;
+                        changes.Add(loc);
+                        _grid.SetCell(x, y, robidx);
+                    }
+                }
+                else if(_destroying)
+                {
+                    if(alive)
+                    {
+                        board[x, y] = false;
+                        changes.Add(loc);
+                        _grid.SetCell(x, y, -1);
                     }
                 }
             }
@@ -106,27 +198,27 @@ public class GameOfLifeScene : Node2D
 
     public override void _Draw()
     {
-        DrawRect(new Rect2(-15, -15, new Vector2(GridWidth, GridHeight)*_grid.CellSize+new Vector2(15,15)), Colors.Black, false, 15);
+        DrawRect(new Rect2(-15, -15, new Vector2(GridWidth, GridHeight) * _grid.CellSize + new Vector2(15, 15)), Colors.Black, false, 15);
         //draw the grid if needed
-        if(GridVisible)
+        if (GridVisible)
         {
 
             var factor = (int)_camera.Zoom.x;
             factor = (int)Mathf.Clamp(factor, 1f, 8f);
             if (factor == 0)
                 factor = 1;
-            for (int x = 0; x < GridWidth; x+=factor)
+            for (int x = 0; x < GridWidth; x += factor)
             {
                 var col = Colors.Black;
                 //if (x % 8 == 0)
-                  //  col = Colors.Gray;
+                //  col = Colors.Gray;
                 DrawLine(MapToWorld(x, 0), MapToWorld(x, GridHeight - 1), col);
             }
-            for (int y = 0; y < GridHeight; y+=factor)
+            for (int y = 0; y < GridHeight; y += factor)
             {
                 var col = Colors.Black;
                 //if (y % 8 == 0)
-                  //  col = Colors.Gray;
+                //  col = Colors.Gray;
                 DrawLine(MapToWorld(0, y), MapToWorld(GridWidth - 1, y), col);
             }
         }
@@ -373,7 +465,7 @@ public class GameOfLifeScene : Node2D
                         z = 0;
                     }
                 }
-                if (IsInBounds(w,z) && board[w, z])
+                if (IsInBounds(w, z) && board[w, z])
                     count++;
             }
         }

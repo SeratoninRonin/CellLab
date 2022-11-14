@@ -4,6 +4,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="2D\Wireworld\" />
+    <Compile Remove="2D\**" />
+    <EmbeddedResource Remove="2D\**" />
   </ItemGroup>
 </Project>

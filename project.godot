@@ -20,8 +20,8 @@ Core="*res://addons/GAGE/Core/Core.tscn"
 
 [display]
 
-window/size/width=1920
-window/size/height=1080
+window/size/width=1440
+window/size/height=900
 
 [editor_plugins]
 
