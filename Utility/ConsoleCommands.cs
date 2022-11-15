@@ -15,7 +15,13 @@ public static class ConsoleCommands
         var kb = b / 1024;
         var mb = kb / 1024;
         DebugConsole.Log(mb.ToString() + "MB");
+        
     }
 
+    [Command("fps","Estimates the current frames per second")]
+    public static void LogFPS()
+    {
+        DebugConsole.Log(Engine.GetFramesPerSecond() + " fps");
+    }
     
 }

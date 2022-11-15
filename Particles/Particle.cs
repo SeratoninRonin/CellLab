@@ -1,49 +1,45 @@
 using Godot;
 using System;
 
-public class Particle : Sprite, IScenePool
+public class Particle : IQuadTreeStorable
 {
     int width, height;
-    Vector2 texSize;
-    public ForceColors ForceColor = ForceColors.White;
+    public Vector2 TexSize;
+    public Color ForceColor = Colors.White;
     public Vector2 Velocity = Vector2.Zero;
+    public Vector2 Position = Vector2.Zero;
+    private Rect2 _bounds;
+    public Rect2 Bounds { get { return _bounds; } set { _bounds = value; } }
 
-    public override void _Ready()
+    public Particle(Vector2 position, Color forceColor, Vector2 velocity, Vector2 viewportSize, Vector2 spriteSize)
     {
-        width = (int)GetViewport().Size.x;
-        height = (int)GetViewport().Size.y;
-        texSize = Texture.GetSize();
-        GD.Print(width + "," + height);
+        Position = position;
+        ForceColor = forceColor;
+        Velocity = velocity;
+        width = (int)viewportSize.x;
+        height = (int)viewportSize.y;
+        TexSize = spriteSize;
     }
 
-    public override void _Process(float delta)
+    public void Update(float delta)
     {
-        if (Visible)
-        {
-            GlobalPosition += Velocity * delta;
-            var pos = GlobalPosition;
+        Position.x = (width + Position.x + Velocity.x * delta) % width;
+        Position.y = (height + Position.y + Velocity.y * delta) % height;
+        _bounds.Position = Position;
+        //    var pos = Position;
 
-            if (pos.x < 0-texSize.x)
-                pos.x = width + pos.x + texSize.x;
-            if (pos.x > width+texSize.x)
-                pos.x = pos.x - width - texSize.x;
-            if(pos.y< 0-texSize.y)    
-                pos.y = height + pos.y + texSize.y;
-            if (pos.y > height+texSize.y)
-                pos.y = pos.y - height - texSize.y;
+        //if (pos.x < 0 - TexSize.x)
+        //    pos.x = width + pos.x;// + TexSize.x;
+        //if (pos.x > width + TexSize.x)
+        //    pos.x = pos.x - width;// - TexSize.x;
+        //if (pos.y < 0 - TexSize.y)
+        //    pos.y = height + pos.y;// + TexSize.y;
+        //if (pos.y > height + TexSize.y)
+        //    pos.y = pos.y - height;// - TexSize.y;
 
-            GlobalPosition = pos;
-        }
+        //    Position = pos;
     }
-
-    public void Reset()
-    {
-        Visible = false;
-        Velocity= Vector2.Zero;
-        Modulate = Colors.White;
-        GlobalPosition = new Vector2(-float.MaxValue,-float.MaxValue);
-    }
-
+        
     public void ApplyForce(Vector2 dir, float force)
     {
         Velocity += dir * force;
