@@ -3,6 +3,7 @@ using System;
 
 public class Particle : IQuadTreeStorable
 {
+    bool _wrap = false;
     int width, height;
     public Vector2 TexSize;
     public Color ForceColor = Colors.White;
@@ -11,33 +12,54 @@ public class Particle : IQuadTreeStorable
     private Rect2 _bounds;
     public Rect2 Bounds { get { return _bounds; } set { _bounds = value; } }
 
-    public Particle(Vector2 position, Color forceColor, Vector2 velocity, Vector2 viewportSize, Vector2 spriteSize)
+    public Particle( Vector2 position, Color forceColor, Vector2 velocity, Vector2 worldSize, Vector2 spriteSize, bool toroidalSpace=false)
     {
         Position = position;
         ForceColor = forceColor;
         Velocity = velocity;
-        width = (int)viewportSize.x;
-        height = (int)viewportSize.y;
+        width = (int)worldSize.x;
+        height = (int)worldSize.y;
         TexSize = spriteSize;
+        _wrap = toroidalSpace;
     }
 
     public void Update(float delta)
     {
-        Position.x = (width + Position.x + Velocity.x * delta) % width;
-        Position.y = (height + Position.y + Velocity.y * delta) % height;
-        _bounds.Position = Position;
-        //    var pos = Position;
+        if (_wrap)
+        {
+            Position.x = (width + Position.x + Velocity.x * delta) % width;
+            Position.y = (height + Position.y + Velocity.y * delta) % height;
+            _bounds.Position = Position;
+        }
+        else
+        {
+            var newPos = Position + (Velocity * delta);
+            if(newPos.x<0 || newPos.x>width || newPos.y<0 || newPos.y>height)
+            {
+                var norm = Vector2.Up;
+                if (newPos.x < 0)
+                    norm = Vector2.Right;
+                else if (newPos.x > width)
+                    norm = Vector2.Left;
+                else if (newPos.y < 0)
+                    norm = Vector2.Down;
+                else if (newPos.y > height)
+                    norm = Vector2.Up;
+                Velocity = -Velocity.Reflect(norm);
+                if (newPos.y < 0)
+                    Position.y = 1;
+                if (newPos.y > height)
+                    Position.y = height - 2;
+                if (newPos.x < 0)
+                    Position.x = 1;
+                if (newPos.x > width)
+                    Position.x = width - 2;
+            }
+            Position += Velocity * delta;
+            _bounds.Position = Position;
 
-        //if (pos.x < 0 - TexSize.x)
-        //    pos.x = width + pos.x;// + TexSize.x;
-        //if (pos.x > width + TexSize.x)
-        //    pos.x = pos.x - width;// - TexSize.x;
-        //if (pos.y < 0 - TexSize.y)
-        //    pos.y = height + pos.y;// + TexSize.y;
-        //if (pos.y > height + TexSize.y)
-        //    pos.y = pos.y - height;// - TexSize.y;
+        }
 
-        //    Position = pos;
     }
         
     public void ApplyForce(Vector2 dir, float force)
