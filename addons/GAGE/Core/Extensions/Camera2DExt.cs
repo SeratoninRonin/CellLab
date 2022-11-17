@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public static class Camera2DExt
 {

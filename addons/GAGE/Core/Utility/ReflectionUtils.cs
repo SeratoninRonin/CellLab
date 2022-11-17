@@ -24,7 +24,7 @@ public static class ReflectionUtils
 
     public static object GetFieldValue(object targetObject, string fieldName) => GetFieldInfo(targetObject, fieldName).GetValue(targetObject);
 
-    #endregion
+    #endregion Fields
 
     #region Properties
 
@@ -81,7 +81,7 @@ public static class ReflectionUtils
         return CreateDelegate<T>(targetObject, propInfo.GetMethod);
     }
 
-    #endregion
+    #endregion Properties
 
     #region Methods
 
@@ -102,7 +102,7 @@ public static class ReflectionUtils
         return type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, Type.DefaultBinder, parameters, null);
     }
 
-    #endregion
+    #endregion Methods
 
     public static T CreateDelegate<T>(object targetObject, MethodInfo methodInfo) =>
         (T)(object)Delegate.CreateDelegate(typeof(T), targetObject, methodInfo);

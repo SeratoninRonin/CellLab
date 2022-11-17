@@ -11,7 +11,6 @@ public abstract class Composite<T> : Behavior<T>
     protected bool _hasLowerPriorityConditionalAbort;
     protected int _currentChildIndex = 0;
 
-
     public override void Invalidate()
     {
         base.Invalidate();
@@ -20,7 +19,6 @@ public abstract class Composite<T> : Behavior<T>
             _children[i].Invalidate();
     }
 
-
     public override void OnStart()
     {
         // LowerPriority aborts happen one level down so we check for any here
@@ -28,14 +26,12 @@ public abstract class Composite<T> : Behavior<T>
         _currentChildIndex = 0;
     }
 
-
     public override void OnEnd()
     {
         // we are done so invalidate our children so they are ready for the next tick
         for (var i = 0; i < _children.Count; i++)
             _children[i].Invalidate();
     }
-
 
     /// <summary>
     /// adds a child to this Composite
@@ -46,7 +42,6 @@ public abstract class Composite<T> : Behavior<T>
         _children.Add(child);
     }
 
-
     /// <summary>
     /// returns true if the first child of a Composite is a Conditional. Usef for dealing with conditional aborts.
     /// </summary>
@@ -56,12 +51,11 @@ public abstract class Composite<T> : Behavior<T>
         return _children[0] is IConditional<T>;
     }
 
-
     /// <summary>
     /// checks the children of the Composite to see if any are a Composite with a LowerPriority AbortType
     /// </summary>
     /// <returns><c>true</c>, if lower priority conditional abort in children was hased, <c>false</c> otherwise.</returns>
-    bool HasLowerPriorityConditionalAbortInChildren()
+    private bool HasLowerPriorityConditionalAbortInChildren()
     {
         for (var i = 0; i < _children.Count; i++)
         {
@@ -77,7 +71,6 @@ public abstract class Composite<T> : Behavior<T>
 
         return false;
     }
-
 
     /// <summary>
     /// checks any child Composites that have a LowerPriority AbortType and a Conditional as the first child. If it finds one it will tick
@@ -110,7 +103,6 @@ public abstract class Composite<T> : Behavior<T>
         }
     }
 
-
     /// <summary>
     /// checks any IConditional children to see if they have changed state
     /// </summary>
@@ -138,14 +130,13 @@ public abstract class Composite<T> : Behavior<T>
         }
     }
 
-
     /// <summary>
     /// helper that gets the TaskStatus of either a Conditional or a ConditionalDecorator
     /// </summary>
     /// <returns>The conditional node.</returns>
     /// <param name="context">Context.</param>
     /// <param name="node">Node.</param>
-    TaskStatus UpdateConditionalNode(T context, Behavior<T> node)
+    private TaskStatus UpdateConditionalNode(T context, Behavior<T> node)
     {
         if (node is ConditionalDecorator<T>)
             return (node as ConditionalDecorator<T>).ExecuteConditional(context, true);

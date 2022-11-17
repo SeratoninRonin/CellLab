@@ -1,11 +1,10 @@
 using Godot;
-using System;
 
 public class GameOfLifeUI : PanelContainer
 {
+    private GameOfLifeScene _parent;
+    private Button _playButton;
 
-    GameOfLifeScene _parent;
-    Button _playButton;
     public override void _Ready()
     {
         _parent = GetParent().GetParent<GameOfLifeScene>();
@@ -39,17 +38,17 @@ public class GameOfLifeUI : PanelContainer
         GetTree().ReloadCurrentScene();
     }
 
-    
-
     public void OnWrapPressed()
     {
         _parent.Wrap = !_parent.Wrap;
     }
+
     public void OnDelayValueChanged(float value)
     {
         _parent.StepDelay = value;
         GD.Print("step " + value);
     }
+
     public void OnPlayButtonPressed()
     {
         _parent.TogglePause();
@@ -58,7 +57,6 @@ public class GameOfLifeUI : PanelContainer
             _playButton.Text = "Play!";
         else
             _playButton.Text = "Pause";
-
     }
 
     public void OnClearButtonPressed()
@@ -70,9 +68,8 @@ public class GameOfLifeUI : PanelContainer
 
     public void OnNoiseButtonPressed()
     {
-       // if (!_parent.IsPaused)
-         //   OnPlayButtonPressed();
-        _parent.AddNoise(); 
+        // if (!_parent.IsPaused)
+        //   OnPlayButtonPressed();
+        _parent.AddNoise();
     }
 }
-

@@ -1,13 +1,10 @@
-﻿using System;
-using Godot;
+﻿using Godot;
 using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
 
 public class Cell
 {
-    int _x, _y;
-    int _index;
+    private int _x, _y;
+    private int _index;
     public Dictionary<string, float> Traits { get; private set; }
     public int Index => _index;
     public int X => _x;
@@ -38,7 +35,7 @@ public class Cell
         return count;
     }
 
-    public List<Cell> GetNeighborsWithTrait(string trait, float amt=-1)
+    public List<Cell> GetNeighborsWithTrait(string trait, float amt = -1)
     {
         var list = new List<Cell>();
 
@@ -46,9 +43,9 @@ public class Cell
         {
             if (n.Traits.ContainsKey(trait))
             {
-                if(amt<0)
+                if (amt < 0)
                     list.Add(n);
-                else if (n.Traits[trait]==amt)
+                else if (n.Traits[trait] == amt)
                     list.Add(n);
             }
         }
@@ -135,9 +132,9 @@ public class Cell
                     }
                 }
 
-                if(grid.IsInBounds(w,z))
+                if (grid.IsInBounds(w, z))
                 {
-                        Neighbors.Add(grid[w, z]);
+                    Neighbors.Add(grid[w, z]);
                     //catch (Exception e)
                     //{
                     //    GD.Print("0-------EXCEPTION-------------*");

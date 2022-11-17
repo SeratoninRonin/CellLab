@@ -7,14 +7,12 @@ public class RandomProbability<T> : Behavior<T>, IConditional<T>
     /// <summary>
     /// The chance that the task will return success
     /// </summary>
-    int _successProbability;
-
+    private int _successProbability;
 
     public RandomProbability(int successProbability)
     {
         _successProbability = successProbability;
     }
-
 
     public override TaskStatus Update(T context)
     {

@@ -34,7 +34,6 @@ public class GlobalManager
 
     private bool _enabled;
 
-
     #region GlobalManager Lifecycle
 
     /// <summary>
@@ -58,5 +57,5 @@ public class GlobalManager
     {
     }
 
-    #endregion
+    #endregion GlobalManager Lifecycle
 }

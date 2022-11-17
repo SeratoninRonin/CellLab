@@ -1,11 +1,14 @@
-﻿using System;
+﻿using SimpleJSON;
+using System;
 using System.Collections.Generic;
-using SimpleJSON;
+
 public class CastleDBParser
 {
     //TextAsset DBTextAsset;
-    string DBText;
+    private string DBText;
+
     public RootNode Root { get; private set; }
+
     public CastleDBParser(string dbText)
     {
         DBText = dbText;
@@ -19,8 +22,9 @@ public class CastleDBParser
 
     public class RootNode
     {
-        JSONNode value;
+        private JSONNode value;
         public List<SheetNode> Sheets { get; protected set; }
+
         public RootNode(JSONNode root)
         {
             value = root;
@@ -30,6 +34,7 @@ public class CastleDBParser
                 Sheets.Add(new SheetNode(item.Value));
             }
         }
+
         public SheetNode GetSheetWithName(string name)
         {
             foreach (var item in Sheets)
@@ -45,11 +50,12 @@ public class CastleDBParser
 
     public class SheetNode
     {
-        JSONNode value;
+        private JSONNode value;
         public bool NestedType { get; protected set; }
         public string Name { get; protected set; }
         public List<ColumnNode> Columns { get; protected set; }
         public List<SimpleJSON.JSONNode> Rows { get; protected set; }
+
         public SheetNode(JSONNode sheetValue)
         {
             value = sheetValue;
@@ -84,10 +90,11 @@ public class CastleDBParser
 
     public class ColumnNode
     {
-        JSONNode value;
+        private JSONNode value;
         public string TypeStr { get; protected set; }
         public string Name { get; protected set; }
         public string Display { get; protected set; }
+
         public ColumnNode(JSONNode sheetValue)
         {
             value = sheetValue;

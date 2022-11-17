@@ -13,12 +13,10 @@ public class LogAction<T> : Behavior<T>
     /// </summary>
     public bool IsError;
 
-
     public LogAction(string text)
     {
         Text = text;
     }
-
 
     public override TaskStatus Update(T context)
     {

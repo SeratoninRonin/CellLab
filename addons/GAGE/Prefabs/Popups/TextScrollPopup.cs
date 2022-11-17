@@ -11,25 +11,34 @@ public class TextScrollPopup : CenterContainer
     protected Timer _finishedTimer;
     protected string _headingText = string.Empty;
     protected List<string> _lines = new List<string>();
-    
+
     [Export]
     public string ActionNext = "ui_accept";
+
     [Export]
     public DynamicFont HeadingFont = null;
+
     [Export]
     public DynamicFont ItemFont = null;
+
     [Export]
     public Color HeadingColor = Colors.White;
+
     [Export]
     public Color ItemColor = Colors.White;
+
     [Export]
     public PackedScene TypewriterEffect;
+
     [Export]
     public float LineTypeSpeed = 1f;
+
     [Export]
     public float LineScrollDelay = .7f;
+
     [Export]
     public float FinishDelay = 3f;
+
     [Signal]
     public delegate void Finished();
 
@@ -52,22 +61,21 @@ public class TextScrollPopup : CenterContainer
                 {
                     if (current != null)
                     {
-                        if(!current.IsQueuedForDeletion())
+                        if (!current.IsQueuedForDeletion())
                             current.ShowNow();
                     }
 
-                    
                     if (_scrollTimer.TimeLeft > 0)
                     {
-                        _scrollTimer.WaitTime = LineScrollDelay/10;
+                        _scrollTimer.WaitTime = LineScrollDelay / 10;
                         _scrollTimer.Start();
                     }
                 }
                 else
                 {
-                    if (_finishedTimer.WaitTime > FinishDelay/2)
+                    if (_finishedTimer.WaitTime > FinishDelay / 2)
                     {
-                        _finishedTimer.WaitTime = FinishDelay/2;
+                        _finishedTimer.WaitTime = FinishDelay / 2;
                         _finishedTimer.Start();
                     }
                 }
@@ -91,6 +99,7 @@ public class TextScrollPopup : CenterContainer
         StopScrollTimer();
         StopFinishTimer();
     }
+
     public void ShowScroll(string heading, List<string> items, float lineTypeSpeed = 1f, float lineScrollDelay = .7f, float finishDelay = 2f)
     {
         finished = false;
@@ -140,7 +149,7 @@ public class TextScrollPopup : CenterContainer
                 label.TotalSeconds = LineTypeSpeed;
             else
             {
-                label.TotalSeconds = LineTypeSpeed/10;
+                label.TotalSeconds = LineTypeSpeed / 10;
                 label.ShowNow();
             }
             _vbox.AddChild(label);

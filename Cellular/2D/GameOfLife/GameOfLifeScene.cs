@@ -1,40 +1,47 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public class GameOfLifeScene : Node2D
 {
-    int robidx;
-    GameOfLifeUI _ui;
-    TileMap _grid;
+    private int robidx;
+    private GameOfLifeUI _ui;
+    private TileMap _grid;
+
     //TileMap _overlay;
-    MoveableCamera _camera;
-    Sprite _selector;
-    bool _simPause = false;
-    int grididx;
-    float _delay;
-    bool[,] board;
-    List<Vector2> changes = new List<Vector2>();
-    bool _placing = false;
-    bool _destroying = false;
+    private MoveableCamera _camera;
+
+    private Sprite _selector;
+    private bool _simPause = false;
+    private int grididx;
+    private float _delay;
+    private bool[,] board;
+    private List<Vector2> changes = new List<Vector2>();
+    private bool _placing = false;
+    private bool _destroying = false;
 
     [Export]
     public float StepDelay = .25f;
+
     [Export]
     public bool Wrap = true;
+
     [Export]
     public int GridWidth = 256;
+
     [Export]
     public int GridHeight = 256;
+
     private bool _gridVisible = true;
+
     [Export]
     public bool GridVisible
     {
         get { return _gridVisible; }
         set { _gridVisible = value; Update(); }
     }
+
     public bool IsPaused => _simPause;
+
     public override void _Ready()
     {
         _delay = StepDelay;
@@ -95,7 +102,7 @@ public class GameOfLifeScene : Node2D
                     var x = (int)loc.x;
                     var y = (int)loc.y;
                     var alive = board[x, y];
-                    if(!alive)
+                    if (!alive)
                     {
                         board[x, y] = true;
                         changes.Add(loc);
@@ -113,7 +120,7 @@ public class GameOfLifeScene : Node2D
                     var x = (int)loc.x;
                     var y = (int)loc.y;
                     var alive = board[x, y];
-                    if(alive)
+                    if (alive)
                     {
                         board[x, y] = false;
                         changes.Add(loc);
@@ -122,18 +129,18 @@ public class GameOfLifeScene : Node2D
                 }
             }
             //left press
-            else if(mb.ButtonIndex==(int)ButtonList.Left && mb.Pressed)
+            else if (mb.ButtonIndex == (int)ButtonList.Left && mb.Pressed)
             {
                 if (!_simPause)
                     _ui.OnPlayButtonPressed();
                 var loc = _grid.WorldToMap(GetGlobalMousePosition());
                 _placing = true;
-                if(IsInBounds(loc))
+                if (IsInBounds(loc))
                 {
                     var x = (int)loc.x;
                     var y = (int)loc.y;
                     var alive = board[x, y];
-                    if(!alive)
+                    if (!alive)
                     {
                         board[x, y] = true;
                         changes.Add(loc);
@@ -142,18 +149,18 @@ public class GameOfLifeScene : Node2D
                 }
             }
             //right press
-            else if(mb.ButtonIndex==(int)ButtonList.Right && mb.Pressed)
+            else if (mb.ButtonIndex == (int)ButtonList.Right && mb.Pressed)
             {
                 if (!_simPause)
                     _ui.OnPlayButtonPressed();
                 var loc = _grid.WorldToMap(GetGlobalMousePosition());
                 _destroying = true;
-                if(IsInBounds(loc))
+                if (IsInBounds(loc))
                 {
                     var x = (int)loc.x;
                     var y = (int)loc.y;
                     var alive = board[x, y];
-                    if(alive)
+                    if (alive)
                     {
                         board[x, y] = false;
                         changes.Add(loc);
@@ -163,7 +170,7 @@ public class GameOfLifeScene : Node2D
             }
         }
         //check dragging
-        if(@event is InputEventMouseMotion mm)
+        if (@event is InputEventMouseMotion mm)
         {
             if (!_placing && !_destroying)
                 return;
@@ -174,18 +181,18 @@ public class GameOfLifeScene : Node2D
                 var y = (int)loc.y;
                 bool alive = board[x, y];
 
-                if(_placing)
+                if (_placing)
                 {
-                    if(!alive)
+                    if (!alive)
                     {
                         board[x, y] = true;
                         changes.Add(loc);
                         _grid.SetCell(x, y, robidx);
                     }
                 }
-                else if(_destroying)
+                else if (_destroying)
                 {
-                    if(alive)
+                    if (alive)
                     {
                         board[x, y] = false;
                         changes.Add(loc);
@@ -202,7 +209,6 @@ public class GameOfLifeScene : Node2D
         //draw the grid if needed
         if (GridVisible)
         {
-
             var factor = (int)_camera.Zoom.x;
             factor = (int)Mathf.Clamp(factor, 1f, 8f);
             if (factor == 0)
@@ -352,12 +358,12 @@ public class GameOfLifeScene : Node2D
                         {
                             changeList.Add(new Vector2(w, z));
                         }
-
                     }
                 }
             }
         }
     }
+
     public void TickAll()
     {
         changes.Clear();
@@ -479,6 +485,7 @@ public class GameOfLifeScene : Node2D
         changes.Clear();
         _grid.Clear();
     }
+
     public void AddNoise()
     {
         for (int x = 0; x < GridWidth; x++)

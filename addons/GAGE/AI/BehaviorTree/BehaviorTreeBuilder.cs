@@ -7,32 +7,29 @@ using System.Collections.Generic;
 /// </summary>
 public class BehaviorTreeBuilder<T>
 {
-    T _context;
+    private T _context;
 
     /// <summary>
     /// Last node created.
     /// </summary>
-    Behavior<T> _currentNode;
+    private Behavior<T> _currentNode;
 
     /// <summary>
     /// Stack nodes that we are build via the fluent API.
     /// </summary>
-    Stack<Behavior<T>> _parentNodeStack = new Stack<Behavior<T>>();
-
+    private Stack<Behavior<T>> _parentNodeStack = new Stack<Behavior<T>>();
 
     public BehaviorTreeBuilder(T context)
     {
         _context = context;
     }
 
-
     public static BehaviorTreeBuilder<T> Begin(T context)
     {
         return new BehaviorTreeBuilder<T>(context);
     }
 
-
-    BehaviorTreeBuilder<T> SetChildOnParent(Behavior<T> child)
+    private BehaviorTreeBuilder<T> SetChildOnParent(Behavior<T> child)
     {
         var parent = _parentNodeStack.Peek();
         if (parent is Composite<T>)
@@ -49,13 +46,12 @@ public class BehaviorTreeBuilder<T>
         return this;
     }
 
-
     /// <summary>
     /// pushes a Composite or Decorator on the stack
     /// </summary>
     /// <returns>The parent node.</returns>
     /// <param name="composite">Composite.</param>
-    BehaviorTreeBuilder<T> PushParentNode(Behavior<T> composite)
+    private BehaviorTreeBuilder<T> PushParentNode(Behavior<T> composite)
     {
         if (_parentNodeStack.Count > 0)
             SetChildOnParent(composite);
@@ -64,13 +60,11 @@ public class BehaviorTreeBuilder<T>
         return this;
     }
 
-
-    BehaviorTreeBuilder<T> EndDecorator()
+    private BehaviorTreeBuilder<T> EndDecorator()
     {
         _currentNode = _parentNodeStack.Pop();
         return this;
     }
-
 
     #region Leaf Nodes (actions and sub trees)
 
@@ -81,7 +75,6 @@ public class BehaviorTreeBuilder<T>
         return SetChildOnParent(new ExecuteAction<T>(func));
     }
 
-
     /// <summary>
     /// Like an action node but the function can return true/false and is mapped to success/failure.
     /// </summary>
@@ -90,14 +83,12 @@ public class BehaviorTreeBuilder<T>
         return Action(t => func(t) ? TaskStatus.Success : TaskStatus.Failure);
     }
 
-
     public BehaviorTreeBuilder<T> Conditional(Func<T, TaskStatus> func)
     {
         Insist.IsFalse(_parentNodeStack.Count == 0,
             "Can't create an unnested Conditional node. It must be a leaf node.");
         return SetChildOnParent(new ExecuteActionConditional<T>(func));
     }
-
 
     /// <summary>
     /// Like a conditional node but the function can return true/false and is mapped to success/failure.
@@ -107,7 +98,6 @@ public class BehaviorTreeBuilder<T>
         return Conditional(t => func(t) ? TaskStatus.Success : TaskStatus.Failure);
     }
 
-
     public BehaviorTreeBuilder<T> LogAction(string text)
     {
         Insist.IsFalse(_parentNodeStack.Count == 0,
@@ -115,14 +105,12 @@ public class BehaviorTreeBuilder<T>
         return SetChildOnParent(new LogAction<T>(text));
     }
 
-
     public BehaviorTreeBuilder<T> WaitAction(float waitTime)
     {
         Insist.IsFalse(_parentNodeStack.Count == 0,
             "Can't create an unnested Action node. It must be a leaf node.");
         return SetChildOnParent(new WaitAction<T>(waitTime));
     }
-
 
     /// <summary>
     /// Splice a sub tree into the parent tree.
@@ -134,8 +122,7 @@ public class BehaviorTreeBuilder<T>
         return SetChildOnParent(new BehaviorTreeReference<T>(subTree));
     }
 
-    #endregion
-
+    #endregion Leaf Nodes (actions and sub trees)
 
     #region Decorators
 
@@ -145,7 +132,6 @@ public class BehaviorTreeBuilder<T>
         return PushParentNode(new ConditionalDecorator<T>(conditional, shouldReevaluate));
     }
 
-
     /// <summary>
     /// Like a conditional decorator node but the function can return true/false and is mapped to success/failure.
     /// </summary>
@@ -154,44 +140,37 @@ public class BehaviorTreeBuilder<T>
         return ConditionalDecorator(t => func(t) ? TaskStatus.Success : TaskStatus.Failure, shouldReevaluate);
     }
 
-
     public BehaviorTreeBuilder<T> AlwaysFail()
     {
         return PushParentNode(new AlwaysFail<T>());
     }
-
 
     public BehaviorTreeBuilder<T> AlwaysSucceed()
     {
         return PushParentNode(new AlwaysSucceed<T>());
     }
 
-
     public BehaviorTreeBuilder<T> Inverter()
     {
         return PushParentNode(new Inverter<T>());
     }
-
 
     public BehaviorTreeBuilder<T> Repeater(int count)
     {
         return PushParentNode(new Repeater<T>(count));
     }
 
-
     public BehaviorTreeBuilder<T> UntilFail()
     {
         return PushParentNode(new UntilFail<T>());
     }
-
 
     public BehaviorTreeBuilder<T> UntilSuccess()
     {
         return PushParentNode(new UntilSuccess<T>());
     }
 
-    #endregion
-
+    #endregion Decorators
 
     #region Composites
 
@@ -200,36 +179,30 @@ public class BehaviorTreeBuilder<T>
         return PushParentNode(new Parallel<T>());
     }
 
-
     public BehaviorTreeBuilder<T> ParallelSelector()
     {
         return PushParentNode(new ParallelSelector<T>());
     }
-
 
     public BehaviorTreeBuilder<T> Selector(AbortTypes abortType = AbortTypes.None)
     {
         return PushParentNode(new Selector<T>(abortType));
     }
 
-
     public BehaviorTreeBuilder<T> RandomSelector()
     {
         return PushParentNode(new RandomSelector<T>());
     }
-
 
     public BehaviorTreeBuilder<T> Sequence(AbortTypes abortType = AbortTypes.None)
     {
         return PushParentNode(new Sequence<T>(abortType));
     }
 
-
     public BehaviorTreeBuilder<T> RandomSequence()
     {
         return PushParentNode(new RandomSequence<T>());
     }
-
 
     public BehaviorTreeBuilder<T> EndComposite()
     {
@@ -239,8 +212,7 @@ public class BehaviorTreeBuilder<T>
         return this;
     }
 
-    #endregion
-
+    #endregion Composites
 
     public BehaviorTree<T> Build(float updatePeriod = 0.2f)
     {

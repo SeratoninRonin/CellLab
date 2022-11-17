@@ -19,10 +19,13 @@ public class ScenePool : Node2D
 {
     [Export]
     public PackedScene PooledScene;
+
     [Export]
     public int CacheSize = 8;
+
     [Export]
     public bool Trim = false;
+
     [Export]
     public bool Randomize = false;
 
@@ -75,7 +78,6 @@ public class ScenePool : Node2D
         }
     }
 
-
     /// <summary>
     /// trims the cache down to cacheCount items
     /// </summary>
@@ -85,7 +87,7 @@ public class ScenePool : Node2D
         if (cacheCount < _objectQueue.Count)
         {
 #if DEBUG
-            
+
             DebugConsole.Log(this.Name + " Trim " + _objectQueue.Count + " to " + cacheCount);
 #endif
             while (cacheCount > _objectQueue.Count)
@@ -95,7 +97,6 @@ public class ScenePool : Node2D
             }
         }
     }
-
 
     /// <summary>
     /// clears out the cache
@@ -108,7 +109,6 @@ public class ScenePool : Node2D
         }
         _objectQueue.Clear();
     }
-
 
     /// <summary>
     /// pops an item off the stack if available creating a new item as necessary
@@ -134,7 +134,6 @@ public class ScenePool : Node2D
         }
         return n;
     }
-
 
     /// <summary>
     /// pushes an item back on the stack

@@ -1,18 +1,17 @@
 using Godot;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 public class ParticleScene : Node2D
 {
-    Label _dragLabel;
+    private Label _dragLabel;
     private static Particle _bob;
-    bool _gridOn = true;
-    Label fpsLabel;
-    Font font;
-    Vector2 _size;
-    bool _wrap = false;
+    private bool _gridOn = true;
+    private Label fpsLabel;
+    private Font font;
+    private Vector2 _size;
+    private bool _wrap = true;
     private Vector2 _maxRangeSize;
+
     //public List<Force> Forces = new List<Force>();
     //public List<Particle> Particles = new List<Particle>();
     //public ChargedForce Force = new ChargedForce();
@@ -20,14 +19,22 @@ public class ParticleScene : Node2D
 
     [Export]
     public float Drag = 0f;
+
     [Export]
     public Texture ParticleTexture;
+
     [Export]
     public Vector2 SimSize = new Vector2(4096, 4096);
+
     [Export]
     public int MaxForceRange = 128;
+
     [Export]
     public float Sigma = .00001f;
+
+    [Export]
+    public bool Wrap
+    { get { return _wrap; } set { _wrap = value; } }
 
     public override void _Ready()
     {
@@ -50,28 +57,25 @@ public class ParticleScene : Node2D
         QuadTree.Add(_bob);
 
         ForceCalculator.WorldSpace = SimSize;
-        ForceCalculator.Rule(Colors.Yellow, Colors.Yellow, -150.50f, 64f);
-        ForceCalculator.Rule(Colors.Yellow, Colors.Purple, 90f, 64f);
-        ForceCalculator.Rule(Colors.Yellow, Colors.Red, -10f, 32f);
-        ForceCalculator.Rule(Colors.Red, Colors.Red, 50f, 96f);
-        ForceCalculator.Rule(Colors.Red, Colors.Yellow, 91.78f, 64f);
-        ForceCalculator.Rule(Colors.Red, Colors.Purple, -1f, 16f);
-        ForceCalculator.Rule(Colors.Purple, Colors.Red, -71.9f, 64f);
-        ForceCalculator.Rule(Colors.Purple, Colors.Yellow, 69f, 64f);
-        ForceCalculator.Rule(Colors.Purple, Colors.Purple, 120f, 64f);
-
+        ForceCalculator.Rule(Colors.Yellow, Colors.Yellow, -80, 96f);
+        ForceCalculator.Rule(Colors.Yellow, Colors.Purple, 10f, 96f);
+        ForceCalculator.Rule(Colors.Yellow, Colors.Red, -20f, 96f);
+        ForceCalculator.Rule(Colors.Red, Colors.Red, 5f, 64f);
+        ForceCalculator.Rule(Colors.Red, Colors.Yellow, 3.78f, 64f);
+        ForceCalculator.Rule(Colors.Red, Colors.Purple, -1f, 32f);
+        ForceCalculator.Rule(Colors.Purple, Colors.Red, -7.7f, 32f);
+        ForceCalculator.Rule(Colors.Purple, Colors.Yellow, 9f, 64f);
+        ForceCalculator.Rule(Colors.Purple, Colors.Purple, 6f, 64f);
     }
 
     private void AddParticles(int count, Color forceColor, float velMin, float velMax)
     {
-
         for (int i = 0; i < count; i++)
         {
             //var color = Randomizer.RandomColor(false);
             var pos = new Vector2(Randomizer.Between(0, _size.x), Randomizer.Between(0, _size.y));
-            var p = new Particle(pos, forceColor, Randomizer.RandomVec2() * Randomizer.Between(velMin, velMax), _size, new Vector2(1,1), _wrap);
+            var p = new Particle(pos, forceColor, Randomizer.RandomVec2() * Randomizer.Between(velMin, velMax), _size, new Vector2(1, 1), _wrap);
             QuadTree.Add(p);
-
         }
     }
 
@@ -89,15 +93,11 @@ public class ParticleScene : Node2D
             p.Update(delta);
             QuadTree.Move(p);
         }
-
-
-
     }
 
     public override void _PhysicsProcess(float delta)
     {
         Update();
-
     }
 
     public override void _Draw()
@@ -109,10 +109,8 @@ public class ParticleScene : Node2D
             DrawCircle(p.Position, 2, p.ForceColor);
         }
 
-
         if (_gridOn)
             DrawQuadHash();
-
     }
 
     internal void ApplyForces()
@@ -137,33 +135,39 @@ public class ParticleScene : Node2D
             //    }
             //}
 
-
             var center = home.Position;
             if (ForceCalculator.Ranges.ContainsKey(home.ForceColor))
             {
                 var maxr = ForceCalculator.Ranges[home.ForceColor];
-                var uLeft = new Vector2(center.x - maxr, center.y - maxr);
-                var neighbors = QuadTree.GetObjects(new Rect2(uLeft, new Vector2(maxr * 2, maxr * 2)));
+                Vector2 uLeft, bRight;
+                if (_wrap)
+                    uLeft = new Vector2((SimSize.x + center.x - maxr) % SimSize.x, (SimSize.y + center.y - maxr) % SimSize.y);
+                else
+                    uLeft = new Vector2(center.x - maxr, center.y - maxr);
+
+                if (_wrap)
+                    bRight = new Vector2((SimSize.x + center.x + maxr) % SimSize.x, (SimSize.y + center.y + maxr) % SimSize.y);
+                else
+                    bRight = new Vector2(center.x + maxr, center.y + maxr);
+
+                Rect2 q = new Rect2();
+                q.Position = uLeft;
+                q.End = bRight;
+                if (q.Size < Vector2.Zero)
+                    GD.Print("size < 0 " + q.ToString());
+
+                //var neighbors = QuadTree.GetObjects(new Rect2(uLeft, new Vector2(maxr * 2, maxr * 2)));
+                var neighbors = QuadTree.GetObjects(q);
                 foreach (var n in neighbors)
                 {
-
                     if (n == home)
                         continue;
                     var dis = n.Position.DistanceTo(home.Position);
                     var f = ForceCalculator.CalculateForce(home.ForceColor, n.ForceColor, dis);
 
-                    if (dis<ForceCalculator.SafeDistance)
+                    if (dis < ForceCalculator.SafeDistance)
                     {
-                        //n.Velocity *= .5f;
-                        //                    var b = Randomizer.BooleanCoinFlip() ? 1 : -1;
-                        //n.Velocity = n.Velocity.Reflect(n.Velocity.Rotated(Mathf.Deg2Rad(90*b)).Normalized());
-                        //n.Velocity = Vector2.Zero;
-                        //n.Velocity = -n.Velocity.Normalized() * ForceCalculator.SafeDistance;
-                        //n.Velocity = Vector2.Zero;
-                        // n.Velocity = -n.Velocity;
-                       // n.Velocity = Vector2.Zero;
-                       n.Velocity=Randomizer.RandomVec2()*ForceCalculator.SafeDistance;
-                        
+                        n.Velocity *= .99f;
                     }
                     if (Mathf.Abs(f) >= Sigma)
                         n.ApplyForce(n.Position.DirectionTo(home.Position), f);

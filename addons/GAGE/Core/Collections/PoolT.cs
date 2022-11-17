@@ -5,9 +5,7 @@ using System.Collections.Generic;
 /// </summary>
 public static class Pool<T> where T : new()
 {
-
     private static Queue<T> _objectQueue = new Queue<T>(10);
-
 
     /// <summary>
     /// warms up the cache filling it with a max of cacheCount objects
@@ -25,7 +23,6 @@ public static class Pool<T> where T : new()
         }
     }
 
-
     /// <summary>
     /// trims the cache down to cacheCount items
     /// </summary>
@@ -38,7 +35,6 @@ public static class Pool<T> where T : new()
         }
     }
 
-
     /// <summary>
     /// clears out the cache
     /// </summary>
@@ -46,7 +42,6 @@ public static class Pool<T> where T : new()
     {
         _objectQueue.Clear();
     }
-
 
     /// <summary>
     /// pops an item off the stack if available creating a new item as necessary
@@ -60,7 +55,6 @@ public static class Pool<T> where T : new()
 
         return new T();
     }
-
 
     /// <summary>
     /// pushes an item back on the stack
@@ -76,7 +70,6 @@ public static class Pool<T> where T : new()
         }
     }
 }
-
 
 /// <summary>
 /// Objects implementing this interface will have {@link #reset()} called when passed to {@link #push(Object)}

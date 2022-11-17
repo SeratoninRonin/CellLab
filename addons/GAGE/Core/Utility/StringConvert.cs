@@ -1,5 +1,5 @@
-﻿using System;
-using Godot;
+﻿using Godot;
+using System;
 
 public static class StringConvert
 {
@@ -48,7 +48,7 @@ public static class StringConvert
             hours = 0;
         }
 
-       return new DateTime(year, month, day, hours, minutes, seconds);
+        return new DateTime(year, month, day, hours, minutes, seconds);
     }
 
     public static Color ColorFromString(string str)

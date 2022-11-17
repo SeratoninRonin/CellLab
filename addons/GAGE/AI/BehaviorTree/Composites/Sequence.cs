@@ -9,7 +9,6 @@ public class Sequence<T> : Composite<T>
         AbortType = abortType;
     }
 
-
     public override TaskStatus Update(T context)
     {
         // first, we handle conditional aborts if we are not already on the first child
@@ -36,8 +35,7 @@ public class Sequence<T> : Composite<T>
         return TaskStatus.Running;
     }
 
-
-    void HandleConditionalAborts(T context)
+    private void HandleConditionalAborts(T context)
     {
         if (_hasLowerPriorityConditionalAbort)
             UpdateLowerPriorityAbortConditional(context, TaskStatus.Success);

@@ -8,17 +8,21 @@ public class Core : Node
     /// provides access to the single Core/Game instance
     /// </summary>
     public static Core Instance => _instance;
+
     /// <summary>
     /// facilitates easy access to the global Content instance for internal classes
     /// </summary>
     internal static Core _instance;
+
     private FastList<GlobalManager> _globalManagers = new FastList<GlobalManager>();
     private CoroutineManager _coroutineManager = new CoroutineManager();
     private TimerManager _timerManager = new TimerManager();
-    
+
 #if DEBUG
+
     //internal TextLog TextLog = new TextLog("core.log");
     private static DebugOverlay _immediate;
+
     public static DebugOverlay Immediate => _immediate;
     public static bool DebugRenderEnabled = false;
 #endif
@@ -27,6 +31,7 @@ public class Core : Node
     {
         _instance = this;
     }
+
     public override void _Ready()
     {
         // setup systems
@@ -37,7 +42,7 @@ public class Core : Node
         _immediate = (DebugOverlay)GD.Load<PackedScene>("res://addons/GAGE/Debuging/DebugOverlay.tscn").Instance();
         _immediate.Name = "Immediate";
         AddChild(_immediate);
-        
+
         if (_immediate.Draw == null)
         {
             _immediate.Draw = _immediate.GetNode<DebugDrawControl>("Draw");
@@ -85,7 +90,7 @@ public class Core : Node
         _instance.GetTree().Quit();
     }
 
-    #endregion
+    #endregion Game Functions
 
     #region Global Managers
 
@@ -129,7 +134,7 @@ public class Core : Node
         return null;
     }
 
-    #endregion
+    #endregion Global Managers
 
     #region Systems access
 
@@ -188,7 +193,7 @@ public class Core : Node
         return _instance._timerManager.Schedule(timeInSeconds, false, null, onTime);
     }
 
-    #endregion
+    #endregion Systems access
 
     #region Screenshots
 
@@ -206,8 +211,9 @@ public class Core : Node
     }
 
 #if DEBUG
-    [Command("screenshot","takes a screenshot to the specified filename after an optional delay")]
-    public static void Screenshot(string filename, float delay=0)
+
+    [Command("screenshot", "takes a screenshot to the specified filename after an optional delay")]
+    public static void Screenshot(string filename, float delay = 0)
     {
         if (delay > 0)
         {
@@ -223,5 +229,5 @@ public class Core : Node
 
 #endif
 
-#endregion
+    #endregion Screenshots
 }

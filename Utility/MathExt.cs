@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Godot;
+﻿using Godot;
 
 public static class MathExt
 {
@@ -15,11 +10,9 @@ public static class MathExt
         if (dx > .5f)
             dx = 1f - dx;
 
-        if(dy>.5f)
-            dy= 1f - dy;
+        if (dy > .5f)
+            dy = 1f - dy;
 
         return Mathf.Sqrt(dx * dx + dy * dy);
     }
-
-    
 }

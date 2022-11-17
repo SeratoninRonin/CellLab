@@ -47,7 +47,6 @@ public class TextLog
 #endif
     }
 
-
     private void Output(string text)
     {
         try

@@ -5,31 +5,44 @@ public class Terrain2D : Node2D
 {
     [Export]
     public bool LineOn = true;
+
     [Export]
     public Color LineColor = Colors.White;
+
     [Export]
     public int LineWidth = 8;
+
     [Export]
     public int LineStep = 3;
+
     [Export]
     public bool GenerateColliders = true;
+
     [Export]
     public int NumHills = 2;
+
     [Export]
     public int Slice = 10;
+
     [Export]
     public int MaxHillHeight = 100;
+
     [Export]
     public int MinHillHeight = 10;
+
     [Export]
     public int StartX = -50;
-    [Export(PropertyHint.Range,"0.0,1.0")]
+
+    [Export(PropertyHint.Range, "0.0,1.0")]
     public float StartY = .96f;
+
     [Export]
     public Texture Tex;
+
     private Line2D line;
     private List<Vector2> terrain = new List<Vector2>();
     private int stepCounter = 0;
+
     public override void _Ready()
     {
         line = GetNode("Line2D") as Line2D;
@@ -43,6 +56,7 @@ public class Terrain2D : Node2D
             line.Width = LineWidth;
         }
     }
+
     public void AddHills()
     {
         var screensize = GetViewport().GetVisibleRect().Size;
@@ -146,7 +160,7 @@ public class Terrain2D : Node2D
         }
         else
         {*/
-            terrain.Add(new Vector2(StartX, StartY * screensize.y));
+        terrain.Add(new Vector2(StartX, StartY * screensize.y));
         //}
 
         for (int i = 0; i < screensWide; i++)
@@ -166,7 +180,5 @@ public class Terrain2D : Node2D
             //AddChild(baseEnd);
             CallDeferred("add_child", baseEnd);
         }*/
-
     }
-
 }

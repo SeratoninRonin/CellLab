@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Godot;
 
 /// <summary>
 /// basic CoroutineManager. Coroutines can do the following:
@@ -27,12 +26,10 @@ public class CoroutineManager : GlobalManager
         public CoroutineImpl WaitForCoroutine;
         //public bool UseUnscaledDeltaTime = false;
 
-
         public void Stop()
         {
             IsDone = true;
         }
-
 
         public ICoroutine SetUseUnscaledDeltaTime(bool useUnscaledDeltaTime)
         {
@@ -40,12 +37,10 @@ public class CoroutineManager : GlobalManager
             return this;
         }
 
-
         internal void PrepareForReuse()
         {
             IsDone = false;
         }
-
 
         void IPoolable.Reset()
         {
@@ -57,15 +52,14 @@ public class CoroutineManager : GlobalManager
         }
     }
 
-
     /// <summary>
     /// flag to keep track of when we are in our update loop. If a new coroutine is started during the update loop we have to stick
     /// it in the shouldRunNextFrame List to avoid modifying a List while we iterate.
     /// </summary>
     private bool _isInUpdate;
+
     private List<CoroutineImpl> _unblockedCoroutines = new List<CoroutineImpl>();
     private List<CoroutineImpl> _shouldRunNextFrame = new List<CoroutineImpl>();
-
 
     /// <summary>
     /// adds the IEnumerator to the CoroutineManager. Coroutines get ticked before Update is called each frame.

@@ -13,7 +13,6 @@ internal class QuickTimer : ITimer
     private bool _isDone;
     private float _elapsedTime;
 
-
     public void Stop()
     {
         _isDone = true;

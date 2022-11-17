@@ -6,5 +6,4 @@ public static class Vector3Ext
     {
         return v.x + v.y + v.z;
     }
-
 }

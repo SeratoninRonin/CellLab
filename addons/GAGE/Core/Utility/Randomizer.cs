@@ -164,10 +164,9 @@ public static class Randomizer
         var g = NextFloat();
         var b = NextFloat();
         var a = randomizeAlpha ? NextFloat() : 1f;
-        var c = new Color(r,g,b,a);
+        var c = new Color(r, g, b, a);
 
         return c;
-
     }
 
     public static int RandomInt()

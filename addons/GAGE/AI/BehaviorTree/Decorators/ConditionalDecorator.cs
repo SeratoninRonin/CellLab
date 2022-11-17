@@ -3,10 +3,9 @@
 /// </summary>
 public class ConditionalDecorator<T> : Decorator<T>, IConditional<T>
 {
-    IConditional<T> _conditional;
-    bool _shouldReevaluate;
-    TaskStatus _conditionalStatus;
-
+    private IConditional<T> _conditional;
+    private bool _shouldReevaluate;
+    private TaskStatus _conditionalStatus;
 
     public ConditionalDecorator(IConditional<T> conditional, bool shouldReevalute)
     {
@@ -15,11 +14,9 @@ public class ConditionalDecorator<T> : Decorator<T>, IConditional<T>
         _shouldReevaluate = shouldReevalute;
     }
 
-
     public ConditionalDecorator(IConditional<T> conditional) : this(conditional, true)
     {
     }
-
 
     public override void Invalidate()
     {
@@ -27,12 +24,10 @@ public class ConditionalDecorator<T> : Decorator<T>, IConditional<T>
         _conditionalStatus = TaskStatus.Invalid;
     }
 
-
     public override void OnStart()
     {
         _conditionalStatus = TaskStatus.Invalid;
     }
-
 
     public override TaskStatus Update(T context)
     {
@@ -46,7 +41,6 @@ public class ConditionalDecorator<T> : Decorator<T>, IConditional<T>
 
         return TaskStatus.Failure;
     }
-
 
     /// <summary>
     /// executes the conditional either following the shouldReevaluate flag or with an option to force an update. Aborts will force the

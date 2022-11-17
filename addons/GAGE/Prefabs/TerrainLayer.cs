@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -12,56 +11,64 @@ public class TerrainLayer : ParallaxLayer
     /// </summary>
     [Export]
     public bool LineOn = true;
+
     /// <summary>
     /// The color of the line
     /// </summary>
     [Export]
     public Color LineColor = Colors.White;
+
     /// <summary>
     /// Line width
     /// </summary>
     [Export]
     public int LineWidth = 8;
+
     /// <summary>
     /// How many screens wide to make the layer.
     /// </summary>
     [Export]
     public int ScreensWide = 1;
+
     /// <summary>
     /// The number of hills generated per layer
     /// </summary>
     [Export]
     public int NumHills = 2;
+
     /// <summary>
     /// How much to slice up the terrain.  Lower numbers are smoother.
     /// </summary>
     [Export]
     public int Slice = 10;
+
     /// <summary>
     /// The maximum hill height
     /// </summary>
     [Export]
     public int MaxHillHeight = 100;
+
     /// <summary>
     /// The minimum hill height
     /// </summary>
     [Export]
     public int MinHillHeight = 10;
+
     /// <summary>
     /// Where to start the hills as a % of the screen height
     /// </summary>
     [Export]
     public float StartY = .96f;
+
     /// <summary>
     /// The texture to use to fill the layer
     /// </summary>
     [Export]
     public Texture Tex;
 
-
-    List<Vector2> terrain = new List<Vector2>();
-    Vector2 screensize;
-    Line2D line;
+    private List<Vector2> terrain = new List<Vector2>();
+    private Vector2 screensize;
+    private Line2D line;
 
     public override void _Ready()
     {
@@ -73,7 +80,6 @@ public class TerrainLayer : ParallaxLayer
             line.DefaultColor = LineColor;
             line.Width = LineWidth;
         }
-
     }
 
     public void AddHills()
@@ -94,7 +100,6 @@ public class TerrainLayer : ParallaxLayer
                 hillPoint.y = start.y + height * Mathf.Cos(2 * Mathf.Pi / hillSlices * j);
                 terrain.Add(hillPoint);
                 poly.Add(hillPoint);
-
             }
             start.y += height;
         }
@@ -113,12 +118,10 @@ public class TerrainLayer : ParallaxLayer
         poly.Add(new Vector2(terrain[terrain.Count - 1].x, screensize.y));
         poly.Add(new Vector2(start.x, screensize.y));
 
-        
         var texPolygon = new Polygon2D();
         texPolygon.Polygon = poly.ToArray();
         texPolygon.Texture = Tex;
         AddChild(texPolygon);
-
     }
 
     public void Clear()
@@ -133,7 +136,7 @@ public class TerrainLayer : ParallaxLayer
                 n.QueueFree();
         }
         terrain.Clear();
-        if(LineOn)
+        if (LineOn)
             line.ClearPoints();
     }
 

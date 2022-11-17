@@ -11,15 +11,14 @@ public class BehaviorTree<T>
     /// <summary>
     /// The context should contain all the data needed to run the tree
     /// </summary>
-    T _context;
+    private T _context;
 
     /// <summary>
     /// root node of the tree
     /// </summary>
-    Behavior<T> _root;
+    private Behavior<T> _root;
 
-    float _elapsedTime;
-
+    private float _elapsedTime;
 
     public BehaviorTree(T context, Behavior<T> rootNode, float updatePeriod = 0.2f)
     {
@@ -28,7 +27,6 @@ public class BehaviorTree<T>
 
         UpdatePeriod = _elapsedTime = updatePeriod;
     }
-
 
     public void Tick()
     {

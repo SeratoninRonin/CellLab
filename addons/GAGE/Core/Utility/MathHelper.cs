@@ -10,7 +10,6 @@ using System;
 /// </summary>
 public static class MathHelper
 {
-
     /// <summary>
     /// Represents the mathematical constant e(2.71828175).
     /// </summary>
@@ -63,7 +62,6 @@ public static class MathHelper
     /// <returns>Cartesian coordinate of the specified point with respect to the axis being used.</returns>
     public static float Barycentric(float value1, float value2, float value3, float amount1, float amount2)
     {
-
         return value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2;
     }
 
@@ -168,14 +166,13 @@ public static class MathHelper
         return (float)result;
     }
 
-
     /// <summary>
     /// Linearly interpolates between two values.
     /// </summary>
     /// <param name="value1">Source value.</param>
     /// <param name="value2">Destination value.</param>
     /// <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
-    /// <returns>Interpolated value.</returns> 
+    /// <returns>Interpolated value.</returns>
     /// <remarks>This method performs the linear interpolation based on the following formula:
     /// <code>value1 + (value2 - value1) * amount</code>.
     /// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
@@ -185,7 +182,6 @@ public static class MathHelper
     {
         return value1 + (value2 - value1) * amount;
     }
-
 
     /// <summary>
     /// Linearly interpolates between two values.
@@ -431,7 +427,6 @@ public static class MathHelper
 
     public static bool IsInSphere(Vector3 center, Vector3 position, float radius)
     {
-
         float x1 = Mathf.Pow((position.x - center.x), 2);
         float y1 = Mathf.Pow((position.y - center.y), 2);
         float z1 = Mathf.Pow((position.z - center.z), 2);
@@ -448,11 +443,11 @@ public static class MathHelper
     {
         Vector3 axis = from.Cross(to);
         float angle = from.AngleTo(to);
-        if(angle>=179.9196f)
+        if (angle >= 179.9196f)
         {
             var r = from.Cross(Vector3.Right);
             axis = r.Cross(from);
-            if(axis.LengthSquared() < 0.0000001)
+            if (axis.LengthSquared() < 0.0000001)
             {
                 axis = Vector3.Up;
             }

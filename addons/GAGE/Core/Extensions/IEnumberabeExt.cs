@@ -13,21 +13,21 @@ public static class IEnumerableExt
     {
         Insist.IsNotNull(source, "source cannot be null");
 
-        // Optimization for ICollection<T> 
+        // Optimization for ICollection<T>
         var genericCollection = source as ICollection<TSource>;
         if (genericCollection != null)
         {
             return genericCollection.Count;
         }
 
-        // Optimization for ICollection 
+        // Optimization for ICollection
         var nonGenericCollection = source as ICollection;
         if (nonGenericCollection != null)
         {
             return nonGenericCollection.Count;
         }
 
-        // Do it the slow way - and make sure we overflow appropriately 
+        // Do it the slow way - and make sure we overflow appropriately
         checked
         {
             int count = 0;

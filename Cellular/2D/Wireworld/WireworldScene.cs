@@ -1,31 +1,30 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-
-
 public class WireworldScene : Node2D
 {
-    bool _placing = false;
-    bool _destroying = false;
-    int _selectedIndex = -1;
-    bool _simPaused= false;
-    float _delay;
-    TileMap _map;
-    MoveableCamera _camera;
-    Sprite _selector;
-    CellGrid _cells;
-    ItemList _tileList;
-    Button _playButton;
+    private bool _placing = false;
+    private bool _destroying = false;
+    private int _selectedIndex = -1;
+    private bool _simPaused = false;
+    private float _delay;
+    private TileMap _map;
+    private MoveableCamera _camera;
+    private Sprite _selector;
+    private CellGrid _cells;
+    private ItemList _tileList;
+    private Button _playButton;
 
-    Dictionary<Vector2, float> changes;
-    int _head, _tail, _wire, _bkg;
+    private Dictionary<Vector2, float> changes;
+    private int _head, _tail, _wire, _bkg;
 
     [Export]
     public float StepDelay = .1f;
+
     [Export]
     public int GridWidth = 64;
+
     [Export]
     public int GridHeight = 64;
 
@@ -34,7 +33,7 @@ public class WireworldScene : Node2D
         _map = GetNode<TileMap>("Grid");
         _camera = GetNode<MoveableCamera>("MoveableCamera");
         _selector = GetNode<Sprite>("SelectorSprite");
-        
+
         _head = _map.TileSet.FindTileByName("Blue");
         _tail = _map.TileSet.FindTileByName("Red");
         _wire = _map.TileSet.FindTileByName("Yellow");
@@ -82,14 +81,14 @@ public class WireworldScene : Node2D
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        if(@event is InputEventMouseButton mb)
+        if (@event is InputEventMouseButton mb)
         {
-            if(mb.ButtonIndex == (int)ButtonList.Right && mb.Pressed)
+            if (mb.ButtonIndex == (int)ButtonList.Right && mb.Pressed)
             {
                 if (!_simPaused)
                     OnPlayButtonPressed();
                 var loc = _map.WorldToMap(GetGlobalMousePosition());
-                if(_cells.IsInBounds(loc))
+                if (_cells.IsInBounds(loc))
                 {
                     _destroying = true;
                     if (!changes.ContainsKey(loc))
@@ -98,18 +97,17 @@ public class WireworldScene : Node2D
                         changes[loc] = _bkg;
                     ApplyChanges();
                 }
-
             }
 
-            if(mb.ButtonIndex==(int)ButtonList.Right && !mb.Pressed)
+            if (mb.ButtonIndex == (int)ButtonList.Right && !mb.Pressed)
             {
                 _destroying = false;
                 ApplyChanges();
             }
 
-            if(mb.ButtonIndex == (int)ButtonList.Left && mb.Pressed)  //left was just pressed
+            if (mb.ButtonIndex == (int)ButtonList.Left && mb.Pressed)  //left was just pressed
             {
-                if(!(_selectedIndex<0)) //can only build when paused
+                if (!(_selectedIndex < 0)) //can only build when paused
                 {
                     if (!_simPaused)
                         OnPlayButtonPressed();
@@ -153,13 +151,13 @@ public class WireworldScene : Node2D
                     }
                 }
             }
-            else if(mb.ButtonIndex == (int)ButtonList.Left && !mb.Pressed)
+            else if (mb.ButtonIndex == (int)ButtonList.Left && !mb.Pressed)
             {
                 _placing = false;
                 ApplyChanges();
             }
         }
-        if(@event is InputEventMouseMotion mm)
+        if (@event is InputEventMouseMotion mm)
         {
             if (_placing)// && !_simPaused)
             {
@@ -199,15 +197,15 @@ public class WireworldScene : Node2D
                     ApplyChanges();
                 }
             }
-            if(_destroying)
+            if (_destroying)
             {
                 var loc = _map.WorldToMap(GetGlobalMousePosition());
-                if(_cells.IsInBounds(loc))
+                if (_cells.IsInBounds(loc))
                 {
                     if (!changes.ContainsKey(loc))
                         changes.Add(loc, _bkg);
                     else
-                        changes[loc]= _bkg;
+                        changes[loc] = _bkg;
 
                     ApplyChanges();
                 }
@@ -240,7 +238,6 @@ public class WireworldScene : Node2D
 
     public void ApplyChanges()
     {
-
         foreach (var kvp in changes)
         {
             var cell = _cells.GetCellAt(kvp.Key);
@@ -306,9 +303,8 @@ public class WireworldScene : Node2D
                 StepNeighbors(loc, closed);
             }
         }
-
-
     }
+
     private void StepNeighbors(Vector2 cellv, List<Vector2> closed)
     {
         var cell = _cells.GetCellAt(cellv);
@@ -317,34 +313,34 @@ public class WireworldScene : Node2D
         {
             //if (!closed.Contains(n.Location))
             //{
-                closed.Add(n.Location);
-                var state = (int)n.Traits["WireState"];
-                if (state == _head)
+            closed.Add(n.Location);
+            var state = (int)n.Traits["WireState"];
+            if (state == _head)
+            {
+                if (!changes.ContainsKey(n.Location))
+                    changes.Add(n.Location, _tail);
+                else changes[n.Location] = _tail;
+            }
+            if (state == _tail)
+            {
+                if (!changes.ContainsKey(n.Location))
+                    changes.Add(n.Location, _wire);
+                else changes[n.Location] = _wire;
+            }
+            if (state == _wire)
+            {
+                var u = n.GetNeighborsWithTrait("WireState", _head).Count;
+                if (u == 1 || u == 2)
                 {
                     if (!changes.ContainsKey(n.Location))
-                        changes.Add(n.Location, _tail);
-                    else changes[n.Location] = _tail;
+                        changes.Add(n.Location, _head);
+                    else changes[n.Location] = _head;
                 }
-                if (state == _tail)
-                {
-                    if (!changes.ContainsKey(n.Location))
-                        changes.Add(n.Location, _wire);
-                    else changes[n.Location] = _wire;
-                }
-                if (state == _wire)
-                {
-                    var u = n.GetNeighborsWithTrait("WireState", _head).Count;
-                    if (u == 1 || u == 2)
-                    {
-                        if (!changes.ContainsKey(n.Location))
-                            changes.Add(n.Location, _head);
-                        else changes[n.Location] = _head;
-                    }
-                }
+            }
             //}
         }
     }
-    
+
     public void OnStepSliderChanged(float value)
     {
         StepDelay = value;
@@ -390,7 +386,7 @@ public class WireworldScene : Node2D
     {
         _placing = false;
         GD.Print("Tile " + index + " Selected!");
-        _selector.Texture=_tileList.GetItemIcon(index);
+        _selector.Texture = _tileList.GetItemIcon(index);
         _selector.Modulate = new Color(1, 1, 1, .5f);
         _selectedIndex = index;
     }

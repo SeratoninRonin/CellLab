@@ -1,9 +1,11 @@
 using Godot;
+
 [Tool]
 public class DisplayLabel : HBoxContainer
 {
     [Export]
     public Texture LegendTexture;
+
     [Export]
     public string InitialValue;
 

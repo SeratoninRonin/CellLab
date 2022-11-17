@@ -1,18 +1,18 @@
 using Godot;
-using System;
 
 public class Particle : IQuadTreeStorable
 {
-    bool _wrap = false;
-    int width, height;
+    private bool _wrap = false;
+    private int width, height;
     public Vector2 TexSize;
     public Color ForceColor = Colors.White;
     public Vector2 Velocity = Vector2.Zero;
     public Vector2 Position = Vector2.Zero;
     private Rect2 _bounds;
-    public Rect2 Bounds { get { return _bounds; } set { _bounds = value; } }
+    public Rect2 Bounds
+    { get { return _bounds; } set { _bounds = value; } }
 
-    public Particle( Vector2 position, Color forceColor, Vector2 velocity, Vector2 worldSize, Vector2 spriteSize, bool toroidalSpace=false)
+    public Particle(Vector2 position, Color forceColor, Vector2 velocity, Vector2 worldSize, Vector2 spriteSize, bool toroidalSpace = false)
     {
         Position = position;
         ForceColor = forceColor;
@@ -34,7 +34,7 @@ public class Particle : IQuadTreeStorable
         else
         {
             var newPos = Position + (Velocity * delta);
-            if(newPos.x<0 || newPos.x>width || newPos.y<0 || newPos.y>height)
+            if (newPos.x < 0 || newPos.x > width || newPos.y < 0 || newPos.y > height)
             {
                 var norm = Vector2.Up;
                 if (newPos.x < 0)
@@ -57,11 +57,9 @@ public class Particle : IQuadTreeStorable
             }
             Position += Velocity * delta;
             _bounds.Position = Position;
-
         }
-
     }
-        
+
     public void ApplyForce(Vector2 dir, float force)
     {
         Velocity += dir * force;

@@ -26,10 +26,10 @@ namespace TinyJson
     // - Parsing of abstract classes or interfaces is NOT supported and will throw an exception.
     public static class JSONParser
     {
-        [ThreadStatic] static Stack<List<string>> splitArrayPool;
-        [ThreadStatic] static StringBuilder stringBuilder;
-        [ThreadStatic] static Dictionary<Type, Dictionary<string, FieldInfo>> fieldInfoCache;
-        [ThreadStatic] static Dictionary<Type, Dictionary<string, PropertyInfo>> propertyInfoCache;
+        [ThreadStatic] private static Stack<List<string>> splitArrayPool;
+        [ThreadStatic] private static StringBuilder stringBuilder;
+        [ThreadStatic] private static Dictionary<Type, Dictionary<string, FieldInfo>> fieldInfoCache;
+        [ThreadStatic] private static Dictionary<Type, Dictionary<string, PropertyInfo>> propertyInfoCache;
 
         public static T FromJson<T>(this string json)
         {
@@ -59,7 +59,7 @@ namespace TinyJson
             return (T)ParseValue(typeof(T), stringBuilder.ToString());
         }
 
-        static int AppendUntilStringEnd(bool appendEscapeCharacter, int startIdx, string json)
+        private static int AppendUntilStringEnd(bool appendEscapeCharacter, int startIdx, string json)
         {
             stringBuilder.Append(json[startIdx]);
             for (int i = startIdx + 1; i < json.Length; i++)
@@ -83,7 +83,7 @@ namespace TinyJson
         }
 
         //Splits { <value>:<value>, <value>:<value> } and [ <value>, <value> ] into a list of <value> strings
-        static List<string> Split(string json)
+        private static List<string> Split(string json)
         {
             List<string> splitArray = splitArrayPool.Count > 0 ? splitArrayPool.Pop() : new List<string>();
             splitArray.Clear();
@@ -99,10 +99,12 @@ namespace TinyJson
                     case '{':
                         parseDepth++;
                         break;
+
                     case ']':
                     case '}':
                         parseDepth--;
                         break;
+
                     case '"':
                         i = AppendUntilStringEnd(true, i, json);
                         continue;
@@ -172,7 +174,7 @@ namespace TinyJson
             if (type == typeof(DateTime))
             {
                 DateTime result;
-                DateTime.TryParse(json.Replace("\"",""), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out result);
+                DateTime.TryParse(json.Replace("\"", ""), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out result);
                 return result;
             }
             if (json == "null")
@@ -261,7 +263,7 @@ namespace TinyJson
             return null;
         }
 
-        static object ParseAnonymousValue(string json)
+        private static object ParseAnonymousValue(string json)
         {
             if (json.Length == 0)
                 return null;
@@ -311,7 +313,7 @@ namespace TinyJson
             return null;
         }
 
-        static Dictionary<string, T> CreateMemberNameDictionary<T>(T[] members) where T : MemberInfo
+        private static Dictionary<string, T> CreateMemberNameDictionary<T>(T[] members) where T : MemberInfo
         {
             Dictionary<string, T> nameToMember = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
             for (int i = 0; i < members.Length; i++)
@@ -334,7 +336,7 @@ namespace TinyJson
             return nameToMember;
         }
 
-        static object ParseObject(Type type, string json)
+        private static object ParseObject(Type type, string json)
         {
             object instance = FormatterServices.GetUninitializedObject(type);
 

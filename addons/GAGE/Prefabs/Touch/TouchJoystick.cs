@@ -10,13 +10,15 @@ public class TouchJoystick : Node2D
 
     [Export]
     public Vector2 ButtonRadius = new Vector2(32, 32);
+
     [Export]
     public float JoystickRadius = 64;
+
     [Export]
     public float Acceleration = 20;
+
     [Export]
     public float Threshold = 8;
-
 
     public override void _Ready()
     {

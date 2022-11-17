@@ -9,7 +9,6 @@ public class Selector<T> : Composite<T>
         AbortType = abortType;
     }
 
-
     public override TaskStatus Update(T context)
     {
         // first, we handle conditinoal aborts if we are not already on the first child
@@ -36,8 +35,7 @@ public class Selector<T> : Composite<T>
         return TaskStatus.Running;
     }
 
-
-    void HandleConditionalAborts(T context)
+    private void HandleConditionalAborts(T context)
     {
         // check any lower priority tasks to see if they changed to a success
         if (_hasLowerPriorityConditionalAbort)

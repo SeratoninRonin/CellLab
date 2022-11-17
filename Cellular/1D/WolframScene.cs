@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections;
 
 public enum WolfInputMode
@@ -20,27 +19,27 @@ public class WolframScene : Node2D
 
     private byte _rule;
 
-    BitArray _ruleset;
-    TileMap _grid;
-    Button _inputButton;
-    Button _wrapButton;
-    Label _genLabel;
+    private BitArray _ruleset;
+    private TileMap _grid;
+    private Button _inputButton;
+    private Button _wrapButton;
+    private Label _genLabel;
     //Label _ruleLabel;
 
-    int width;
-    int height;
-    int center;
-    bool wrap = false;
+    private int width;
+    private int height;
+    private int center;
+    private bool wrap = false;
 
-    int robidx = -1;
-    int gen = 1;
+    private int robidx = -1;
+    private int gen = 1;
 
-    WolfInputMode mode = WolfInputMode.Center;
+    private WolfInputMode mode = WolfInputMode.Center;
 
     public override void _Ready()
     {
         _rule = 0;
-        _ruleset = new BitArray(new byte[] {_rule});
+        _ruleset = new BitArray(new byte[] { _rule });
         _grid = GetNode<TileMap>("Grid");
         _inputButton = GetNode<Button>("Box/InputButton");
         _wrapButton = GetNode<Button>("Box/WrapButton");
@@ -49,7 +48,7 @@ public class WolframScene : Node2D
         width = (int)(GetViewport().Size.x / _grid.CellSize.x);
         height = (int)(GetViewport().Size.y / _grid.CellSize.y);
         center = width / 2;
-        GD.Print("grid size: " + width + "," + height+"  center: "+center);
+        GD.Print("grid size: " + width + "," + height + "  center: " + center);
         robidx = _grid.TileSet.FindTileByName("Rob");
         InitializeGrid();
     }
@@ -64,24 +63,27 @@ public class WolframScene : Node2D
     {
         _grid.Clear();
         gen = 1;
-        switch(mode)
+        switch (mode)
         {
             case WolfInputMode.Empty:
                 break;
+
             case WolfInputMode.Full:
                 for (int i = 0; i < width; i++)
                 {
                     _grid.SetCell(i, 0, robidx);
                 }
                 break;
+
             case WolfInputMode.Center:
                 _grid.SetCellv(new Vector2(center, 0), robidx);
                 break;
+
             case WolfInputMode.Random:
                 for (int i = 0; i < width; i++)
                 {
-                    if(Randomizer.BooleanCoinFlip())
-                        _grid.SetCellv(new Vector2(i,0), robidx);
+                    if (Randomizer.BooleanCoinFlip())
+                        _grid.SetCellv(new Vector2(i, 0), robidx);
                 }
                 break;
         }
@@ -91,7 +93,7 @@ public class WolframScene : Node2D
     {
         if (!left && !cell && !right)
             return _ruleset[0];
-        if(!left && !cell && right)
+        if (!left && !cell && right)
             return _ruleset[1];
         if (!left && cell && !right)
             return _ruleset[2];
@@ -125,15 +127,14 @@ public class WolframScene : Node2D
     public bool[] NextLine(bool[] previous)
     {
         var result = new bool[width];
-        for (int q = 1; q < width-1; q++)
+        for (int q = 1; q < width - 1; q++)
         {
             result[q] = MapRule(previous[q - 1], previous[q], previous[q + 1]);
         }
         if (wrap)
         {
-            result[0] = MapRule(previous[width-1], previous[0], previous[1]);
+            result[0] = MapRule(previous[width - 1], previous[0], previous[1]);
             result[width - 1] = MapRule(previous[width - 2], previous[width - 1], previous[0]);
-
         }
         else
         {

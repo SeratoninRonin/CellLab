@@ -2,7 +2,6 @@
 {
     public Behavior<T> Child;
 
-
     public override void Invalidate()
     {
         base.Invalidate();

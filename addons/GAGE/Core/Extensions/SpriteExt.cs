@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Godot;
+﻿using Godot;
 
 public static class SpriteExt
 {
@@ -11,7 +9,7 @@ public static class SpriteExt
         var w = sprite.Texture.GetWidth();
         var h = sprite.Texture.GetHeight();
         //var rect = new Rect2(0,0,sprite.Texture.GetWidth(), sprite.Texture.GetHeight());
-        var rect = new Rect2(0,0, w, h);
+        var rect = new Rect2(0, 0, w, h);
         var my_array = bm.OpaqueToPolygons(rect);
         if (my_array != null && my_array.Count > 0)
             return (Vector2[])my_array[0];

@@ -16,7 +16,6 @@ public interface ICoroutine
     ICoroutine SetUseUnscaledDeltaTime(bool useUnscaledDeltaTime);
 }
 
-
 public static class Coroutine
 {
     /// <summary>
@@ -29,7 +28,6 @@ public static class Coroutine
         return WaitForSecondsHelper.waiter.Wait(seconds);
     }
 }
-
 
 /// <summary>
 /// helper class for when a coroutine wants to pause for some duration. Returning Coroutine.waitForSeconds returns one of these

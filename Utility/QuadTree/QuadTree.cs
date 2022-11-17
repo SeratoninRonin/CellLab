@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using Godot;
+using System.Collections;
 using System.Collections.Generic;
-using Godot;
 
 /// <summary>
 /// A QuadTree Object that provides fast and efficient storage of objects in a world space.
@@ -8,12 +8,11 @@ using Godot;
 /// <typeparam name="T">Any object implementing IQuadStorable.</typeparam>
 public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
 {
-    readonly Dictionary<T, QuadTreeObject<T>> _wrappedDictionary = new Dictionary<T, QuadTreeObject<T>>();
+    private readonly Dictionary<T, QuadTreeObject<T>> _wrappedDictionary = new Dictionary<T, QuadTreeObject<T>>();
 
     // Alternate method, use Parallel arrays
     // The root of this quad tree
-    readonly QuadTreeNode<T> _quadTreeRoot;
-
+    private readonly QuadTreeNode<T> _quadTreeRoot;
 
     /// <summary>
     /// Creates a QuadTree for the specified area.
@@ -23,7 +22,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     {
         _quadTreeRoot = new QuadTreeNode<T>(rect);
     }
-
 
     /// <summary>
     /// Creates a QuadTree for the specified area.
@@ -37,7 +35,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         _quadTreeRoot = new QuadTreeNode<T>(new Rect2(x, y, width, height));
     }
 
-
     /// <summary>
     /// Gets the rectangle that bounds this QuadTree
     /// </summary>
@@ -45,7 +42,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     {
         get { return _quadTreeRoot.QuadRect; }
     }
-
 
     /// <summary>
     /// Get the objects in this tree that intersect with the specified rectangle.
@@ -56,6 +52,10 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         return _quadTreeRoot.GetObjects(rect);
     }
 
+    public List<T> GetObjectsToroidal(Rect2 sourceRect)
+    {
+        return null;
+    }
 
     /// <summary>
     /// Get the objects in this tree that intersect with the specified rectangle.
@@ -67,7 +67,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         _quadTreeRoot.GetObjects(rect, ref results);
     }
 
-
     /// <summary>
     /// Get all objects in this Quad, and it's children.
     /// </summary>
@@ -75,7 +74,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     {
         return new List<T>(_wrappedDictionary.Keys);
     }
-
 
     /// <summary>
     /// Moves the object in the tree
@@ -91,7 +89,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         return false;
     }
 
-
     //public void DebugRender(SpriteBatch batch)
     //{
     //    DebugRenderNode(batch, _quadTreeRoot);
@@ -102,7 +99,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     //        batch.DrawRectangle(ele.Bounds, Color.MonoGameOrange);
     //    }
     //}
-
 
     //public void DebugRenderNode(SpriteBatch batch, QuadTreeNode<T> node)
     //{
@@ -123,7 +119,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     //        DebugRenderNode(batch, node.BottomRightChild);
     //}
 
-
     /// <summary>
     /// The top left child for this QuadTree, only usable in debug mode
     /// </summary>
@@ -131,7 +126,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     {
         get { return _quadTreeRoot; }
     }
-
 
     #region ICollection<T> Members
 
@@ -148,7 +142,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         _quadTreeRoot.Insert(wrappedObject);
     }
 
-
     ///<summary>
     ///Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
     ///</summary>
@@ -159,7 +152,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         _wrappedDictionary.Clear();
         _quadTreeRoot.Clear();
     }
-
 
     ///<summary>
     ///Determines whether the QuadTree contains a specific value.
@@ -175,7 +167,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         return _wrappedDictionary.ContainsKey(item);
     }
 
-
     ///<summary>
     /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
     ///</summary>
@@ -188,7 +179,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         _wrappedDictionary.Keys.CopyTo(array, arrayIndex);
     }
 
-
     ///<summary>
     /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
     ///</summary>
@@ -199,7 +189,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     {
         get { return _wrappedDictionary.Count; }
     }
-
 
     ///<summary>
     /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
@@ -213,7 +202,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
     {
         get { return false; }
     }
-
 
     ///<summary>
     /// Removes the first occurrence of a specific object from the QuadTree
@@ -237,8 +225,7 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         }
     }
 
-    #endregion
-
+    #endregion ICollection<T> Members
 
     #region IEnumerable<T> and IEnumerable Members
 
@@ -255,7 +242,6 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         return _wrappedDictionary.Keys.GetEnumerator();
     }
 
-
     ///<summary>
     /// Returns an enumerator that iterates through a collection.
     ///</summary>
@@ -269,7 +255,5 @@ public class QuadTree<T> : ICollection<T> where T : IQuadTreeStorable
         return GetEnumerator();
     }
 
-    #endregion
-
+    #endregion IEnumerable<T> and IEnumerable Members
 }
-

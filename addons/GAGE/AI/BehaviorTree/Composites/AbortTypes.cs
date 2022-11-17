@@ -27,7 +27,6 @@ public enum AbortTypes
     Both = Self | LowerPriority
 }
 
-
 public static class AbortTypesExt
 {
     public static bool Has(this AbortTypes self, AbortTypes check)

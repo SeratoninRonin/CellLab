@@ -8,7 +8,6 @@ public class TimerManager : GlobalManager
 {
     private List<QuickTimer> _timers = new List<QuickTimer>();
 
-
     public override void Update(float delta)
     {
         for (var i = _timers.Count - 1; i >= 0; i--)

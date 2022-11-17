@@ -1,26 +1,30 @@
 using Godot;
-using System;
 
 public class TransitionTexture : TextureRect
 {
-    
-
     [Signal]
-    delegate void Finished();
+    private delegate void Finished();
+
     [Export]
     public Texture Mask;
+
     [Export]
     public Texture Old;
+
     [Export]
     public float TransitionTime = 1.0f;
+
     [Export]
     public bool Invert = false;
+
     [Export]
     public bool Distort = false;
+
     [Export]
     public float Smoothing = 0f;
 
-    Tween tween;
+    private Tween tween;
+
     public override void _Ready()
     {
         tween = GetNode<Tween>("Tween");
@@ -39,7 +43,6 @@ public class TransitionTexture : TextureRect
         mat.SetShaderParam("smoothing", Smoothing);
         tween.InterpolateProperty(mat, "shader_param/delta", 0f, 1f, TransitionTime);
         tween.Start();
-        
     }
 
     public override void _Process(float delta)

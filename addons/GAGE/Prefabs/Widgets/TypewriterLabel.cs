@@ -6,6 +6,7 @@ public class TypewriterLabel : Label
     public float TotalSeconds = 1;
 
     private AnimationPlayer anim;
+
     public override void _Ready()
     {
         anim = GetNode<AnimationPlayer>("Anim");
@@ -25,9 +26,8 @@ public class TypewriterLabel : Label
     {
         if (anim != null)
         {
-            if(anim.HasAnimation("ShowNow"))
+            if (anim.HasAnimation("ShowNow"))
                 anim.Play("ShowNow");
-         
         }
         PercentVisible = 1f;
     }

@@ -1,16 +1,15 @@
 using Godot;
-using System;
 
 public class InputEventSwipe : InputEventScreenTouch
 {
     public Vector2 Direction = Vector2.Zero;
 }
 
-
 public class SwipeDetector : Node
 {
     [Signal]
     public delegate void Swiped(Vector2 direction);
+
     [Signal]
     public delegate void SwipeCanceled(Vector2 startPosition);
 

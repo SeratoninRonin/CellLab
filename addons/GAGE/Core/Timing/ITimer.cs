@@ -2,7 +2,6 @@
 {
     object Context { get; }
 
-
     /// <summary>
     /// call stop to stop this timer from being run again. This has no effect on a non-repeating timer.
     /// </summary>

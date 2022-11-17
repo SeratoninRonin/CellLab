@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 /// <summary>
 /// CameraShaker adds shake to a Camera2D
@@ -7,16 +6,16 @@ using System;
 /// </summary>
 public class CameraShaker : Node
 {
-    const Tween.TransitionType TRANS = Tween.TransitionType.Sine;
-    const Tween.EaseType EASE = Tween.EaseType.InOut;
+    private const Tween.TransitionType TRANS = Tween.TransitionType.Sine;
+    private const Tween.EaseType EASE = Tween.EaseType.InOut;
 
-    float amplitude = 0;
-    int priority = 0;
+    private float amplitude = 0;
+    private int priority = 0;
 
-    Tween shakeTween;
-    Timer frequencyTimer;
-    Timer durationTimer;
-    Camera2D camera;
+    private Tween shakeTween;
+    private Timer frequencyTimer;
+    private Timer durationTimer;
+    private Camera2D camera;
 
     public override void _Ready()
     {

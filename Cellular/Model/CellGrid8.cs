@@ -5,7 +5,6 @@
 //using System.Threading.Tasks;
 //using Godot;
 
-
 //public class CellGrid8 : ICellGraph2D
 //{
 //    int _max = 0;
@@ -84,7 +83,6 @@
 //                //    cell.Neighbors.Add(this[loc + Vector2.Left]);
 //                //if (IsInBounds(loc + Vector2.Left + Vector2.Up))
 //                //    cell.Neighbors.Add(this[loc + Vector2.Left + Vector2.Up]);
-
 
 //            }
 //        }

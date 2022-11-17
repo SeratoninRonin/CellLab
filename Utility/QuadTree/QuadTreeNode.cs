@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Godot;
+﻿using Godot;
+using System.Collections.Generic;
 
 /// <summary>
 /// A QuadTree Object that provides fast and efficient storage of objects in a world space.
@@ -8,71 +8,76 @@ using Godot;
 public class QuadTreeNode<T> where T : IQuadTreeStorable
 {
     // How many objects can exist in a QuadTree before it sub divides itself
-    const int maxObjectsPerNode = 2;
-
+    private const int maxObjectsPerNode = 2;
 
     /// <summary>
     /// The area this QuadTree represents.
     /// </summary>
-    public Rect2 QuadRect { get { return _rect; } }
+    public Rect2 QuadRect
+    { get { return _rect; } }
 
     /// <summary>
     /// The top left child for this QuadTree
     /// </summary>
-    public QuadTreeNode<T> TopLeftChild { get { return _childTL; } }
+    public QuadTreeNode<T> TopLeftChild
+    { get { return _childTL; } }
 
     /// <summary>
     /// The top right child for this QuadTree
     /// </summary>
-    public QuadTreeNode<T> TopRightChild { get { return _childTR; } }
+    public QuadTreeNode<T> TopRightChild
+    { get { return _childTR; } }
 
     /// <summary>
     /// The bottom left child for this QuadTree
     /// </summary>
-    public QuadTreeNode<T> BottomLeftChild { get { return _childBL; } }
+    public QuadTreeNode<T> BottomLeftChild
+    { get { return _childBL; } }
 
     /// <summary>
     /// The bottom right child for this QuadTree
     /// </summary>
-    public QuadTreeNode<T> BottomRightChild { get { return _childBR; } }
+    public QuadTreeNode<T> BottomRightChild
+    { get { return _childBR; } }
 
     /// <summary>
     /// This QuadTree's parent
     /// </summary>
-    public QuadTreeNode<T> Parent { get { return _parent; } }
+    public QuadTreeNode<T> Parent
+    { get { return _parent; } }
 
     /// <summary>
     /// How many total objects are contained within this QuadTree (ie, includes children)
     /// </summary>
-    public int Count { get { return ObjectCount(); } }
+    public int Count
+    { get { return ObjectCount(); } }
 
     /// <summary>
     /// Returns true if this is a empty leaf node
     /// </summary>
-    public bool isEmptyLeaf { get { return Count == 0 && _childTL == null; } }
-
+    public bool isEmptyLeaf
+    { get { return Count == 0 && _childTL == null; } }
 
     // The objects in this QuadTree
-    List<QuadTreeObject<T>> _objects;
+    private List<QuadTreeObject<T>> _objects;
 
     // The area this QuadTree represents
-    Rect2 _rect;
+    private Rect2 _rect;
 
     // The parent of this quad
-    QuadTreeNode<T> _parent;
+    private QuadTreeNode<T> _parent;
 
     // Top Left Child
-    QuadTreeNode<T> _childTL;
+    private QuadTreeNode<T> _childTL;
 
     // Top Right Child
-    QuadTreeNode<T> _childTR;
+    private QuadTreeNode<T> _childTR;
 
     // Bottom Left Child
-    QuadTreeNode<T> _childBL;
+    private QuadTreeNode<T> _childBL;
 
     // Bottom Right Child
-    QuadTreeNode<T> _childBR;
-
+    private QuadTreeNode<T> _childBR;
 
     /// <summary>
     /// Creates a QuadTree for the specified area.
@@ -82,7 +87,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
     {
         _rect = rect;
     }
-
 
     /// <summary>
     /// Creates a QuadTree for the specified area.
@@ -96,18 +100,16 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         _rect = new Rect2(x, y, width, height);
     }
 
-
-    QuadTreeNode(QuadTreeNode<T> parent, Rect2 rect) : this(rect)
+    private QuadTreeNode(QuadTreeNode<T> parent, Rect2 rect) : this(rect)
     {
         _parent = parent;
     }
-
 
     /// <summary>
     /// Add an item to the object list.
     /// </summary>
     /// <param name="item">The item to add.</param>
-    void Add(QuadTreeObject<T> item)
+    private void Add(QuadTreeObject<T> item)
     {
         if (_objects == null)
             _objects = new List<QuadTreeObject<T>>();
@@ -116,12 +118,11 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         _objects.Add(item);
     }
 
-
     /// <summary>
     /// Remove an item from the object list.
     /// </summary>
     /// <param name="item">The object to remove.</param>
-    void Remove(QuadTreeObject<T> item)
+    private void Remove(QuadTreeObject<T> item)
     {
         if (_objects != null)
         {
@@ -134,12 +135,11 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         }
     }
 
-
     /// <summary>
     /// Get the total for all objects in this QuadTree, including children.
     /// </summary>
     /// <returns>The number of objects contained within this QuadTree and its children.</returns>
-    int ObjectCount()
+    private int ObjectCount()
     {
         var count = 0;
 
@@ -161,11 +161,10 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         return count;
     }
 
-
     /// <summary>
     /// Subdivide this QuadTree and move it's children into the appropriate Quads where applicable.
     /// </summary>
-    void Subdivide()
+    private void Subdivide()
     {
         // We've reached capacity, subdivide...
         var size = new Vector2(_rect.Size.x / 2, _rect.Size.y / 2);
@@ -191,13 +190,12 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         }
     }
 
-
     /// <summary>
     /// Get the child Quad that would contain an object.
     /// </summary>
     /// <param name="item">The object to get a child for.</param>
     /// <returns></returns>
-    QuadTreeNode<T> GetDestinationTree(QuadTreeObject<T> item)
+    private QuadTreeNode<T> GetDestinationTree(QuadTreeObject<T> item)
     {
         // If a child can't contain an object, it will live in this Quad
         var destTree = this;
@@ -214,8 +212,7 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         return destTree;
     }
 
-
-    void Relocate(QuadTreeObject<T> item)
+    private void Relocate(QuadTreeObject<T> item)
     {
         // Are we still inside our parent?
         if (QuadRect.Encloses(item.Data.Bounds))
@@ -245,8 +242,7 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         }
     }
 
-
-    void CleanUpwards()
+    private void CleanUpwards()
     {
         if (_childTL != null)
         {
@@ -269,7 +265,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
                 _parent.CleanUpwards();
         }
     }
-
 
     /// <summary>
     /// Clears the QuadTree of all objects, including any objects living in its children.
@@ -299,7 +294,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         _childBR = null;
     }
 
-
     /// <summary>
     /// Deletes an item from this QuadTree. If the object is removed causes this Quad to have no objects in its children, it's children will be removed as well.
     /// </summary>
@@ -321,8 +315,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
             }
         }
     }
-
-
 
     /// <summary>
     /// Insert an item into this QuadTree object.
@@ -365,7 +357,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         }
     }
 
-
     /// <summary>
     /// Get the objects in this tree that intersect with the specified rectangle.
     /// </summary>
@@ -376,7 +367,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         GetObjects(searchRect, ref results);
         return results;
     }
-
 
     /// <summary>
     /// Get the objects in this tree that intersect with the specified rectangle.
@@ -417,7 +407,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         }
     }
 
-
     /// <summary>
     /// Get all objects in this Quad, and it's children.
     /// </summary>
@@ -441,7 +430,6 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         }
     }
 
-
     /// <summary>
     /// Moves the QuadTree object in the tree
     /// </summary>
@@ -453,6 +441,4 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         else
             Relocate(item);
     }
-
 }
-

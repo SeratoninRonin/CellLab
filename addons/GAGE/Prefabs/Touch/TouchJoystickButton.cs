@@ -7,7 +7,8 @@ public class TouchJoystickButton : Node2D
     public float Acceleration = 20;
     public float Threshold = 8;
 
-    public int OngoingDrag { get { return _ongoingDrag; } }
+    public int OngoingDrag
+    { get { return _ongoingDrag; } }
     protected int _ongoingDrag = -1;
 
     public override void _Ready()

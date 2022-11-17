@@ -1,12 +1,9 @@
 using Godot;
-using System;
 
 public class MainMenuScene : Node2D
 {
-   
     public override void _Ready()
     {
-        
     }
 
     public void OnWolfButtonPressed()

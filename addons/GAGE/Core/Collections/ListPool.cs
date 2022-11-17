@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+
 /// <summary>
 /// simple static class that can be used to pool Lists
 /// </summary>
 public static class ListPool<T>
 {
-    static readonly Queue<List<T>> _objectQueue = new Queue<List<T>>();
-
+    private static readonly Queue<List<T>> _objectQueue = new Queue<List<T>>();
 
     /// <summary>
     /// warms up the cache filling it with a max of cacheCount objects

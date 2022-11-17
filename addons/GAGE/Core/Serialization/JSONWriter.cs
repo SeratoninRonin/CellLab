@@ -20,7 +20,7 @@ namespace TinyJson
             return stringBuilder.ToString();
         }
 
-        static void AppendValue(StringBuilder stringBuilder, object item)
+        private static void AppendValue(StringBuilder stringBuilder, object item)
         {
             if (item == null)
             {
@@ -181,7 +181,7 @@ namespace TinyJson
             }
         }
 
-        static string GetMemberName(MemberInfo member)
+        private static string GetMemberName(MemberInfo member)
         {
             if (member.IsDefined(typeof(DataMemberAttribute), true))
             {

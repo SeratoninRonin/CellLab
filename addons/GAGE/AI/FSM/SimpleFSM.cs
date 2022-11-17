@@ -23,6 +23,7 @@ public class SimpleFSM : Node
 
     public string PreviousState { get; protected set; }
     private string _currentState;
+
     public string CurrentState
     {
         get => _currentState;
@@ -71,7 +72,6 @@ public class SimpleFSM : Node
         }
     }
 
-
     public override void _Ready()
     {
         States = States.ToList();
@@ -84,7 +84,6 @@ public class SimpleFSM : Node
 
     public override void _Process(float delta)
     {
-
         if (_currentState != null)
         {
             ElapsedTimeInState += delta;

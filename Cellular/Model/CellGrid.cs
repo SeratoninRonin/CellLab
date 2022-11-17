@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Godot;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Godot;
 
 public class CellGrid
 {
-    int _max = 0;
+    private int _max = 0;
     private bool _wrap = true;
     public bool Wrap => _wrap;
     public int GridWidth = 64;
@@ -29,7 +25,7 @@ public class CellGrid
                 Cells.Add(new Cell(x, y, _max));
             }
         }
-      //  GD.Print("Added " + Cells.Count + " _m:" + _max);
+        //  GD.Print("Added " + Cells.Count + " _m:" + _max);
         foreach (var c in Cells)
             c.RefreshNeighbors(this);
     }

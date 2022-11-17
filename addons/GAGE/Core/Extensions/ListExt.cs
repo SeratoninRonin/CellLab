@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-
 public static class ListExt
 {
     /// <summary>
@@ -21,7 +20,6 @@ public static class ListExt
         }
     }
 
-
     /// <summary>
     /// returns false if the item is already in the List and true if it was successfully added.
     /// </summary>
@@ -38,7 +36,6 @@ public static class ListExt
         return true;
     }
 
-
     /// <summary>
     /// returns the last item in the list. List should have at least one item.
     /// </summary>
@@ -48,7 +45,6 @@ public static class ListExt
     {
         return list[list.Count - 1];
     }
-
 
     /// <summary>
     /// gets a random item from the list. Does not empty check the list!
@@ -60,7 +56,6 @@ public static class ListExt
     {
         return list[Randomizer.Range(0, list.Count)];
     }
-
 
     /// <summary>
     /// gets random items from the list. Does not empty check the list or verify that list count is greater than item count! The returned List can be put back in the pool via ListPool.free.

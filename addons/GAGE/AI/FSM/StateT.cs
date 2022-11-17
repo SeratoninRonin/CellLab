@@ -1,10 +1,7 @@
-using Godot;
-
 public abstract class StateT<T>
 {
     protected StateMachineT<T> _machine;
     protected T _context;
-
 
     public void SetMachineAndContext(StateMachineT<T> machine, T context)
     {
@@ -13,14 +10,12 @@ public abstract class StateT<T>
         OnInitialized();
     }
 
-
     /// <summary>
     /// called directly after the machine and context are set allowing the state to do any required setup
     /// </summary>
     public virtual void OnInitialized()
     {
     }
-
 
     /// <summary>
     /// called when the state becomes the active state
@@ -29,7 +24,6 @@ public abstract class StateT<T>
     {
     }
 
-
     /// <summary>
     /// called before update allowing the state to have one last chance to change state
     /// </summary>
@@ -37,13 +31,11 @@ public abstract class StateT<T>
     {
     }
 
-
     /// <summary>
     /// called every frame this state is the active state
     /// </summary>
     /// <param name="delta">Delta time.</param>
     public abstract void Update(float delta);
-
 
     /// <summary>
     /// called when this state is no longer the active state

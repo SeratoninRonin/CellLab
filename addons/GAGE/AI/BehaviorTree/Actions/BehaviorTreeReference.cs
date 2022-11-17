@@ -3,14 +3,12 @@
 /// </summary>
 public class BehaviorTreeReference<T> : Behavior<T>
 {
-    BehaviorTree<T> _childTree;
-
+    private BehaviorTree<T> _childTree;
 
     public BehaviorTreeReference(BehaviorTree<T> tree)
     {
         _childTree = tree;
     }
-
 
     public override TaskStatus Update(T context)
     {

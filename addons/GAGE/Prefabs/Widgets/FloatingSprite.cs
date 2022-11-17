@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public class FloatingSprite : Position2D, IScenePool
 {
@@ -36,7 +35,7 @@ public class FloatingSprite : Position2D, IScenePool
         Gravity = gravityDir;
         Modulate = color;
         Scale = Vector2.Zero;
-        
+
         //after .7 seconds, have the text fade out quickly
         Tween.InterpolateProperty(this, "modulate", color,
             new Color(color.r, color.g, color.b, 0f),
@@ -52,7 +51,7 @@ public class FloatingSprite : Position2D, IScenePool
         Visible = true;
     }
 
-    public void Start(Color color, Vector2 velocity, Vector2 gravityDir, float duration, float mass=1)
+    public void Start(Color color, Vector2 velocity, Vector2 gravityDir, float duration, float mass = 1)
     {
         var fadeoutTime = duration * .7f;
         var fadeoutDelay = duration * .3f;

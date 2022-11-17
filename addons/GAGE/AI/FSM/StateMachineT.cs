@@ -1,13 +1,11 @@
-using Godot;
 using System;
 using System.Collections.Generic;
 
 public class StateMachineT<T>
-{ 
+{
     public event Action OnStateChanged;
 
     public StateT<T> CurrentState => _currentState;
-
 
     public StateT<T> PreviousState;
     public float ElapsedTimeInState = 0f;
@@ -27,7 +25,6 @@ public class StateMachineT<T>
         _currentState.Begin();
     }
 
-
     /// <summary>
     /// adds the state to the machine
     /// </summary>
@@ -36,7 +33,6 @@ public class StateMachineT<T>
         state.SetMachineAndContext(this, _context);
         _states[state.GetType()] = state;
     }
-
 
     /// <summary>
     /// ticks the state machine with the provided delta time
@@ -55,7 +51,7 @@ public class StateMachineT<T>
     public virtual R GetState<R>() where R : StateT<T>
     {
         var type = typeof(R);
-        
+
         if (_states.ContainsKey(type))
             return (R)_states[type];
         else return null;
@@ -134,4 +130,3 @@ public class StateMachineT<T>
         return _currentState as R;
     }
 }
-

@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public class MoveableCamera : Camera2D
 {
@@ -7,13 +6,15 @@ public class MoveableCamera : Camera2D
 
     [Export]
     public float CameraSpeed = 100f;
+
     [Export]
     public Vector2 ZoomMin = new Vector2(.5f, .5f);
+
     [Export]
     public Vector2 ZoomMax = new Vector2(3.5f, 3.5f);
+
     [Export]
     public Vector2 ZoomAmount = new Vector2(.1f, .1f);
-
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -48,7 +49,6 @@ public class MoveableCamera : Camera2D
         if (mov != Vector2.Zero)
         {
             GlobalPosition += mov * delta;
-
         }
     }
 
@@ -80,5 +80,4 @@ public class MoveableCamera : Camera2D
         }
         base._UnhandledInput(@event);
     }
-
 }

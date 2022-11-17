@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using Godot;
+
 // TODO: add Conditionals for all log levels
 public static partial class Debug
 {
-    enum LogType
+    private enum LogType
     {
         Error,
         Warn,
@@ -13,29 +13,33 @@ public static partial class Debug
         Trace
     }
 
-
     #region Logging
 
     [DebuggerHidden]
-    static void Log(LogType type, string format, params object[] args)
+    private static void Log(LogType type, string format, params object[] args)
     {
         switch (type)
         {
             case LogType.Error:
                 System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
                 break;
+
             case LogType.Warn:
                 System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
                 break;
+
             case LogType.Log:
                 System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
                 break;
+
             case LogType.Info:
                 System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
                 break;
+
             case LogType.Trace:
                 System.Diagnostics.Debug.WriteLine(type.ToString() + ": " + format, args);
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -103,8 +107,7 @@ public static partial class Debug
         Log(LogType.Trace, format, args);
     }
 
-    #endregion
-
+    #endregion Logging
 
     [Conditional("DEBUG")]
     public static void BreakIf(bool condition)

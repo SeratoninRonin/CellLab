@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// very basic wrapper around an array that auto-expands it when it reaches capacity. Note that when iterating it should be done
 /// like this accessing the buffer directly but using the FastList.length field:
-/// 
+///
 /// for( var i = 0; i &lt;= list.length; i++ )
 /// 	var item = list.buffer[i];
 /// </summary>
@@ -26,7 +26,6 @@ public class FastList<T>
         Buffer = new T[size];
     }
 
-
     public FastList() : this(5)
     {
     }
@@ -37,7 +36,6 @@ public class FastList<T>
     /// <param name="index">Index.</param>
     public T this[int index] => Buffer[index];
 
-
     /// <summary>
     /// clears the list and nulls out all items in the buffer
     /// </summary>
@@ -47,7 +45,6 @@ public class FastList<T>
         Length = 0;
     }
 
-
     /// <summary>
     /// works just like clear except it does not null our all the items in the buffer. Useful when dealing with structs.
     /// </summary>
@@ -55,7 +52,6 @@ public class FastList<T>
     {
         Length = 0;
     }
-
 
     /// <summary>
     /// adds the item to the list
@@ -69,7 +65,6 @@ public class FastList<T>
 
         Buffer[Length++] = item;
     }
-
 
     /// <summary>
     /// removes the item from the list
@@ -88,7 +83,6 @@ public class FastList<T>
         }
     }
 
-
     /// <summary>
     /// removes the item at the given index from the list
     /// </summary>
@@ -105,7 +99,6 @@ public class FastList<T>
         Buffer[Length] = default(T);
     }
 
-
     /// <summary>
     /// removes the item at the given index from the list but does NOT maintain list order
     /// </summary>
@@ -118,7 +111,6 @@ public class FastList<T>
         Buffer[Length - 1] = default(T);
         --Length;
     }
-
 
     /// <summary>
     /// checks to see if item is in the FastList
@@ -138,7 +130,6 @@ public class FastList<T>
         return false;
     }
 
-
     /// <summary>
     /// if the buffer is at its max more space will be allocated to fit additionalItemCount
     /// </summary>
@@ -149,7 +140,6 @@ public class FastList<T>
             Array.Resize(ref Buffer, Math.Max(Buffer.Length << 1, Length + additionalItemCount));
         }
     }
-
 
     /// <summary>
     /// adds all items from array
@@ -163,7 +153,6 @@ public class FastList<T>
         }
     }
 
-
     /// <summary>
     /// sorts all items in the buffer up to length
     /// </summary>
@@ -172,7 +161,6 @@ public class FastList<T>
         Array.Sort(Buffer, 0, Length);
     }
 
-
     /// <summary>
     /// sorts all items in the buffer up to length
     /// </summary>
@@ -180,7 +168,6 @@ public class FastList<T>
     {
         Array.Sort(Buffer, 0, Length, comparer);
     }
-
 
     /// <summary>
     /// sorts all items in the buffer up to length

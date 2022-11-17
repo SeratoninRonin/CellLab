@@ -19,8 +19,7 @@ public class Repeater<T> : Decorator<T>
     /// </summary>
     public bool EndOnFailure;
 
-    int _iterationCount;
-
+    private int _iterationCount;
 
     public Repeater(int count, bool endOnFailure = false)
     {
@@ -28,19 +27,16 @@ public class Repeater<T> : Decorator<T>
         EndOnFailure = endOnFailure;
     }
 
-
     public Repeater(bool repeatForever, bool endOnFailure = false)
     {
         RepeatForever = repeatForever;
         EndOnFailure = endOnFailure;
     }
 
-
     public override void OnStart()
     {
         _iterationCount = 0;
     }
-
 
     public override TaskStatus Update(T context)
     {

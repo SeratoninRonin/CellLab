@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 /// <summary>
 /// wraps an ExecuteAction so that it can be used as a Conditional
 /// </summary>

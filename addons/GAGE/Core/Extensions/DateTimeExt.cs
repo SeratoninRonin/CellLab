@@ -1,11 +1,10 @@
-﻿using System;
-using Godot;
+﻿using Godot;
+using System;
 
 public static class DateTimeExt
 {
     public static DateTime DateTimeFromString(string dateTimeString)
     {
-        
         var text = dateTimeString;
         var dateTimeAMPM = text.Split(' ');
         var monthDayYear = dateTimeAMPM[0].Split('/');
@@ -28,7 +27,7 @@ public static class DateTimeExt
             hours = 0;
         }
         GD.Print("Translating date string: " + dateTimeString);
-        GD.Print(year + " " + month + " " + day + " " + hours + " " + minutes +" "+ seconds);
+        GD.Print(year + " " + month + " " + day + " " + hours + " " + minutes + " " + seconds);
         return new DateTime(year, month, day, hours, minutes, seconds);
     }
 }

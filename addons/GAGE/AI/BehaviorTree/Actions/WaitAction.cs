@@ -9,20 +9,17 @@ public class WaitAction<T> : Behavior<T>
     /// </summary>
     public float WaitTime;
 
-    float _startTime;
-
+    private float _startTime;
 
     public WaitAction(float waitTime)
     {
         WaitTime = waitTime;
     }
 
-
     public override void OnStart()
     {
         _startTime = 0;
     }
-
 
     public override TaskStatus Update(T context)
     {

@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using Godot;
 
 /// <summary>
 /// provides frame timing information
@@ -64,12 +63,10 @@ public static class Time
         FrameCount++;
     }
 
-
     internal static void SceneChanged()
     {
         TimeSinceSceneLoad = 0f;
     }
-
 
     /// <summary>
     /// Allows to check in intervals. Should only be used with interval values above deltaTime,

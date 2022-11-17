@@ -1,9 +1,6 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Godot;
 
 public struct ColorMatch : IEquatable<ColorMatch>
 {
@@ -49,7 +46,7 @@ public class MatchDetails : Tuple<ColorMatch, ForceDetails>
 public static class ForceCalculator
 {
     public static Vector2 WorldSpace;
-    public static float SafeDistance = 6f;
+    public static float SafeDistance = 8f;
     public static float SafeValue = 0f;
 
     private static Dictionary<ColorMatch, ForceDetails> _rules
@@ -59,6 +56,7 @@ public static class ForceCalculator
     public static Dictionary<Color, float> Ranges = new Dictionary<Color, float>();
 
     public static Dictionary<ColorMatch, ForceDetails> Rules => _rules;
+
     public static void Rule(Color from, Color to, float force, float distance)
     {
         var colorMatch = new ColorMatch(from, to);
@@ -67,16 +65,15 @@ public static class ForceCalculator
             _rules.Add(colorMatch, forceDetails);
         else
             _rules[colorMatch] = forceDetails;
-        if(!Ranges.ContainsKey(from))
+        if (!Ranges.ContainsKey(from))
         {
             Ranges.Add(from, distance);
         }
         else
         {
-            if (Ranges[from]<distance)
+            if (Ranges[from] < distance)
                 Ranges[from] = distance;
         }
-    
     }
 
     public static float CalculateForce(Color from, Color to, float dist)
@@ -95,7 +92,7 @@ public static class ForceCalculator
             //  frc = frc * SafeValue;
             if (dist < SafeDistance)
                 return -1;
-               // return -frc;
+            // return -frc;
             return frc / dist;
             //if (dist > SafeDistance)
             //    return frc / dist;

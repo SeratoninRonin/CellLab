@@ -1,6 +1,5 @@
 using System.Diagnostics;
 
-
 public static class Insist
 {
     [Conditional("DEBUG")]
@@ -11,7 +10,6 @@ public static class Insist
         Debugger.Break();
     }
 
-
     [Conditional("DEBUG")]
     [DebuggerHidden]
     public static void Fail(string message, params object[] args)
@@ -19,7 +17,6 @@ public static class Insist
         System.Diagnostics.Debug.Assert(false, string.Format(message, args));
         Debugger.Break();
     }
-
 
     [Conditional("DEBUG")]
     [DebuggerHidden]
@@ -31,7 +28,6 @@ public static class Insist
         }
     }
 
-
     [Conditional("DEBUG")]
     [DebuggerHidden]
     public static void IsTrue(bool condition, string message, params object[] args)
@@ -42,7 +38,6 @@ public static class Insist
         }
     }
 
-
     [Conditional("DEBUG")]
     [DebuggerHidden]
     public static void IsFalse(bool condition)
@@ -50,14 +45,12 @@ public static class Insist
         IsTrue(!condition);
     }
 
-
     [Conditional("DEBUG")]
     [DebuggerHidden]
     public static void IsFalse(bool condition, string message, params object[] args)
     {
         IsTrue(!condition, message, args);
     }
-
 
     /// <summary>
     /// asserts that obj is null
@@ -72,7 +65,6 @@ public static class Insist
         IsTrue(obj == null);
     }
 
-
     /// <summary>
     /// asserts that obj is null
     /// </summary>
@@ -85,7 +77,6 @@ public static class Insist
     {
         IsTrue(obj == null, message, args);
     }
-
 
     /// <summary>
     /// asserts that obj is not null
@@ -100,7 +91,6 @@ public static class Insist
         IsTrue(obj != null);
     }
 
-
     /// <summary>
     /// asserts that obj is not null
     /// </summary>
@@ -113,7 +103,6 @@ public static class Insist
     {
         IsTrue(obj != null, message, args);
     }
-
 
     /// <summary>
     /// asserts that first is equal to second
@@ -131,7 +120,6 @@ public static class Insist
             Fail(message, args);
         }
     }
-
 
     /// <summary>
     /// asserts that first is not equal to second
