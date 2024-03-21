@@ -325,7 +325,7 @@ public class QuadTreeNode<T> where T : IQuadTreeStorable
         // If this quad doesn't contain the items rectangle, do nothing, unless we are the root
         if (!_rect.Encloses(item.Data.Bounds))
         {
-            Insist.IsNull(_parent, "We are not the root, and this object doesn't fit here. How did we get here?");
+            //Insist.IsNull(_parent, "We are not the root, and this object doesn't fit here. How did we get here?");
             if (_parent == null)
             {
                 // This object is outside of the QuadTree bounds, we should add it at the root level

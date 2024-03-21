@@ -153,8 +153,7 @@ public class ParticleScene : Node2D
                 Rect2 q = new Rect2();
                 q.Position = uLeft;
                 q.End = bRight;
-                if (q.Size < Vector2.Zero)
-                    GD.Print("size < 0 " + q.ToString());
+                
 
                 //var neighbors = QuadTree.GetObjects(new Rect2(uLeft, new Vector2(maxr * 2, maxr * 2)));
                 var neighbors = QuadTree.GetObjects(q);
@@ -208,13 +207,6 @@ public class ParticleScene : Node2D
     public void ToggleGrid()
     {
         _gridOn = !_gridOn;
-    }
-
-    [Command("bob", "echos bob's position")]
-    public static void Bob()
-    {
-        //GD.Print(_bob.Position);
-        DebugConsole.Log(_bob.Position.ToString());
     }
 
     public void OnDragSliderChanged(float value)

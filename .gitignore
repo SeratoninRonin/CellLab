@@ -6,6 +6,7 @@
 .vscode/
 .import/
 .mono/
+.godot/
 
 #ignore these files
 *.suo

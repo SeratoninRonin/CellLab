@@ -48,7 +48,7 @@ public class WolframScene : Node2D
         width = (int)(GetViewport().Size.x / _grid.CellSize.x);
         height = (int)(GetViewport().Size.y / _grid.CellSize.y);
         center = width / 2;
-        GD.Print("grid size: " + width + "," + height + "  center: " + center);
+        //GD.Print("grid size: " + width + "," + height + "  center: " + center);
         robidx = _grid.TileSet.FindTileByName("Rob");
         InitializeGrid();
     }
@@ -184,8 +184,8 @@ public class WolframScene : Node2D
     {
         _rule = (byte)value;
         _ruleset = new BitArray(new byte[] { _rule });
-        GD.Print("rule to " + value + " b:" + (byte)value + " i:" + (int)value);
-        GD.Print("ruleset: " + _rule);
+       // GD.Print("rule to " + value + " b:" + (byte)value + " i:" + (int)value);
+       // GD.Print("ruleset: " + _rule);
         InitializeGrid();
     }
 

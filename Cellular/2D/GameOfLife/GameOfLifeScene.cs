@@ -95,7 +95,7 @@ public class GameOfLifeScene : Node2D
             {
                 var pos = GetGlobalMousePosition();
                 var loc = _grid.WorldToMap(pos);
-                GD.Print("Click!  p:" + pos + "  l:" + loc);
+                //GD.Print("Click!  p:" + pos + "  l:" + loc);
                 _placing = false;
                 if (IsInBounds(loc))
                 {

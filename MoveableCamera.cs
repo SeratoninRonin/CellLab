@@ -60,12 +60,12 @@ public class MoveableCamera : Camera2D
             if (@event.IsActionPressed("CameraZoomIn"))
             {
                 zm -= ZoomAmount;
-                GD.Print(Zoom);
+                //GD.Print(Zoom);
             }
             else if (@event.IsActionPressed("CameraZoomOut"))
             {
                 zm += ZoomAmount;
-                GD.Print(Zoom);
+                //GD.Print(Zoom);
             }
             if (zm.IsEqualApprox(ZoomMin) || zm < ZoomMin)
             {

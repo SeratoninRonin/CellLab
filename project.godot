@@ -11,12 +11,8 @@ config_version=4
 [application]
 
 config/name="CellLab"
-run/main_scene="res://Particles/ParticlesScene.tscn"
+run/main_scene="res://MainMenuScene.tscn"
 config/icon="res://icon.png"
-
-[autoload]
-
-Core="*res://addons/GAGE/Core/Core.tscn"
 
 [display]
 

@@ -71,7 +71,7 @@ public class WireworldScene : Node2D
                 _delay = StepDelay;
                 if (count > 0)
                 {
-                    GD.Print("Stepping " + count + " changes");
+                    //GD.Print("Stepping " + count + " changes");
                     StepChanges();
                     ApplyChanges();
                 }
@@ -111,7 +111,7 @@ public class WireworldScene : Node2D
                 {
                     if (!_simPaused)
                         OnPlayButtonPressed();
-                    GD.Print("Gonna place!");
+                    //GD.Print("Gonna place!");
                     var loc = _map.WorldToMap(GetGlobalMousePosition());
                     if (_cells.IsInBounds(loc))
                     {
@@ -161,7 +161,7 @@ public class WireworldScene : Node2D
         {
             if (_placing)// && !_simPaused)
             {
-                GD.Print("dragging");
+               //GD.Print("dragging");
                 var loc = _map.WorldToMap(GetGlobalMousePosition());
                 if (_cells.IsInBounds(loc))
                 {
@@ -344,7 +344,7 @@ public class WireworldScene : Node2D
     public void OnStepSliderChanged(float value)
     {
         StepDelay = value;
-        GD.Print("slider change to " + value);
+        //GD.Print("slider change to " + value);
     }
 
     public void OnClearButtonPressed()
@@ -385,7 +385,7 @@ public class WireworldScene : Node2D
     public void OnTileSelected(int index)
     {
         _placing = false;
-        GD.Print("Tile " + index + " Selected!");
+       // GD.Print("Tile " + index + " Selected!");
         _selector.Texture = _tileList.GetItemIcon(index);
         _selector.Modulate = new Color(1, 1, 1, .5f);
         _selectedIndex = index;

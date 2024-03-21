@@ -46,7 +46,7 @@ public class GameOfLifeUI : PanelContainer
     public void OnDelayValueChanged(float value)
     {
         _parent.StepDelay = value;
-        GD.Print("step " + value);
+        //GD.Print("step " + value);
     }
 
     public void OnPlayButtonPressed()

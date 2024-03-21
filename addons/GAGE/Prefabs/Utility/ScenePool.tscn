@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=2]
-
-[ext_resource path="res://addons/GAGE/Prefabs/Utility/ScenePool.cs" type="Script" id=1]
-
-
-[node name="ScenePool" type="Node2D"]
-script = ExtResource( 1 )
